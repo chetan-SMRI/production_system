@@ -1,0 +1,123 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-19 12:22:43.966574",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "milestone",
+  "task_subject",
+  "task_type",
+  "item",
+  "assigned_to",
+  "tat",
+  "start_date",
+  "due_date",
+  "status",
+  "dependency_type",
+  "dependency_target",
+  "dependency_resolved"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Production Project"
+  },
+  {
+   "fieldname": "milestone",
+   "fieldtype": "Link",
+   "label": "Milestone",
+   "options": "Production Project Milestone"
+  },
+  {
+   "fieldname": "task_subject",
+   "fieldtype": "Data",
+   "label": "Task Subject"
+  },
+  {
+   "fieldname": "task_type",
+   "fieldtype": "Select",
+   "label": "Task Type",
+   "options": "Project\nItem"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Production Item"
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "options": "User"
+  },
+  {
+   "fieldname": "tat",
+   "fieldtype": "Duration",
+   "label": "TAT"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Datetime",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Datetime",
+   "label": "Due Date"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Datetime",
+   "label": "Status",
+   "options": "Pending\nIn Progress\nCompleted\nBlocked"
+  },
+  {
+   "fieldname": "dependency_type",
+   "fieldtype": "Select",
+   "label": "Dependency Type",
+   "options": "None\nTask\nTask(Item)\nAggregate"
+  },
+  {
+   "fieldname": "dependency_target",
+   "fieldtype": "Data",
+   "label": "Dependency Target"
+  },
+  {
+   "default": "0",
+   "fieldname": "dependency_resolved",
+   "fieldtype": "Check",
+   "label": "Dependency Resolved"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-08-19 12:39:51.909839",
+ "modified_by": "Administrator",
+ "module": "Production System",
+ "name": "Production Task",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-19 12:33:49.427858",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "item_code",
+  "status",
+  "column_break_brrx",
+  "item_name",
+  "qty"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "label": "Item Code"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Int",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "column_break_brrx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nIn Progress\nCompleted"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-08-19 12:35:02.308114",
+ "modified_by": "Administrator",
+ "module": "Production System",
+ "name": "Production Item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
