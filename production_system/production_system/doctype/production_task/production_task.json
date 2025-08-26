@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:T-{YY}-{MM}-{#####}",
  "creation": "2025-08-19 12:22:43.966574",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,43 +12,48 @@
   "task_type",
   "item",
   "assigned_to",
-  "tat",
+  "column_break_bnty",
+  "status",
   "start_date",
   "due_date",
-  "status",
-  "dependency_type",
-  "dependency_target",
-  "dependency_resolved"
+  "tat"
  ],
  "fields": [
   {
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Project",
-   "options": "Production Project"
+   "options": "Production Project",
+   "read_only": 1
   },
   {
    "fieldname": "milestone",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "Milestone",
-   "options": "Production Project Milestone"
+   "read_only": 1
   },
   {
    "fieldname": "task_subject",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Task Subject"
   },
   {
+   "default": "Direct",
    "fieldname": "task_type",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Task Type",
-   "options": "Project\nItem"
+   "options": "Project\nItem\nDirect"
   },
   {
    "fieldname": "item",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Item",
-   "options": "Production Item"
+   "read_only": 1
   },
   {
    "fieldname": "assigned_to",
@@ -57,8 +63,8 @@
   },
   {
    "fieldname": "tat",
-   "fieldtype": "Duration",
-   "label": "TAT"
+   "fieldtype": "Int",
+   "label": "TAT (in days)"
   },
   {
    "fieldname": "start_date",
@@ -72,35 +78,25 @@
   },
   {
    "fieldname": "status",
-   "fieldtype": "Datetime",
-   "label": "Status",
-   "options": "Pending\nIn Progress\nCompleted\nBlocked"
-  },
-  {
-   "fieldname": "dependency_type",
    "fieldtype": "Select",
-   "label": "Dependency Type",
-   "options": "None\nTask\nTask(Item)\nAggregate"
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Pending\nIn Progress\nCompleted\nCancelled"
   },
   {
-   "fieldname": "dependency_target",
-   "fieldtype": "Data",
-   "label": "Dependency Target"
-  },
-  {
-   "default": "0",
-   "fieldname": "dependency_resolved",
-   "fieldtype": "Check",
-   "label": "Dependency Resolved"
+   "fieldname": "column_break_bnty",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-19 12:39:51.909839",
+ "modified": "2025-08-26 15:05:50.286652",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Task",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

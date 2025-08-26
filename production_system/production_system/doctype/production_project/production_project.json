@@ -1,18 +1,20 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:project_name",
  "creation": "2025-08-19 12:23:02.996112",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "project_name",
   "start_date",
-  "excel_template_file",
-  "generate_item_tasks",
+  "template_file",
   "column_break_vkjv",
   "status",
-  "section_break_qmvy",
-  "milestones"
+  "section_break_bzoq",
+  "items",
+  "generate_item_tasks",
+  "initialised_item_tasks"
  ],
  "fields": [
   {
@@ -20,7 +22,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Project Name",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "start_date",
@@ -34,42 +37,53 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "Draft",
    "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nIn Progress\nCompleted\nOn Hold"
+   "fieldtype": "Percent",
+   "label": "Percentage Completion",
+   "read_only": 1
   },
   {
-   "fieldname": "excel_template_file",
+   "depends_on": "eval: !doc.initialised_item_tasks",
+   "fieldname": "generate_item_tasks",
+   "fieldtype": "Button",
+   "label": "Generate Item Tasks"
+  },
+  {
+   "fieldname": "template_file",
    "fieldtype": "Attach",
    "in_list_view": 1,
    "label": "Excel Template File",
    "reqd": 1
   },
   {
-   "fieldname": "generate_item_tasks",
-   "fieldtype": "Button",
-   "label": "Generate Item Tasks"
-  },
-  {
-   "fieldname": "section_break_qmvy",
+   "fieldname": "section_break_bzoq",
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "milestones",
+   "allow_bulk_edit": 1,
+   "fieldname": "items",
    "fieldtype": "Table",
-   "label": "Milestones",
-   "options": "Production Project Milestone"
+   "label": "Items",
+   "options": "Production Item",
+   "read_only_depends_on": "eval: doc.initialised_item_tasks"
+  },
+  {
+   "default": "0",
+   "description": "If they got initialized, then make the generate item tasks button invisible and also the item table readonly.",
+   "fieldname": "initialised_item_tasks",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Initialised Item Tasks?"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-19 12:33:20.905438",
+ "modified": "2025-08-26 15:04:12.191146",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
