@@ -7,6 +7,7 @@ class ProductionProject(Document):
     def after_insert(self):
         # Run task creation engine on project creation
         create_initial_tasks(self)
+        initialize_milestones(self)
 
 
 def clean(val, default=None):
@@ -70,3 +71,54 @@ def create_initial_tasks(project):
             task.insert(ignore_permissions=True)
 
     frappe.db.commit()
+
+import openpyxl
+
+import frappe
+import openpyxl
+
+def initialize_milestones(doc):
+    """
+    Initialize milestones in Production Project from uploaded template_file (Excel).
+    """
+
+    if not doc.template_file:
+        frappe.throw("No template file found in this Production Project")
+
+    # Get file path from File doctype
+    file_doc = frappe.get_doc("File", {"file_url": doc.template_file})
+    filepath = frappe.get_site_path("private", "files", file_doc.file_name)
+
+    # Load Excel
+    wb = openpyxl.load_workbook(filepath)
+    ws = wb.active  # assuming first sheet has milestones
+
+    milestone_names = []
+    for row in ws.iter_rows(min_row=2, values_only=True):  
+        # assuming excel has milestone_name in first column
+        milestone = row[0]  # <-- milestone column index (0=A, 1=B, etc.)
+        if milestone and milestone not in milestone_names:
+            milestone_names.append(milestone)
+
+
+    if not milestone_names:
+        frappe.throw("No milestones found in template file")
+
+    total = len(milestone_names)
+    weight_each = round(100 / total, 2) if total else 0
+
+    # Clear existing milestones in table
+    doc.set("milestones", [])
+
+    for idx, ms in enumerate(milestone_names, start=1):
+        doc.append("milestones", {
+            "milestone_name": ms,
+            "sequence": idx,
+            "status": "Pending",
+            "percentage_completion": 0,
+            "weight": weight_each
+        })
+
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return {"success": True, "milestones_created": total}

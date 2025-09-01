@@ -6,6 +6,7 @@ class ProductionTask(Document):
     def validate(doc):
         if doc.status == "Completed" or doc.status == "Cancelled":
             on_task_completed(doc)
+            update_milestone_progress(doc)
 
 def on_task_completed(task):
     """
@@ -51,7 +52,7 @@ def on_task_completed(task):
         dep_type = str(clean(raw.get("Dependency Type"), "")).strip()
         if dep_type != "Aggregate":
             continue
-        print(dep_type)
+        
         dep_target = str(clean(raw.get("Dependency Target"), "")).strip()     # the item-task subject we wait for
         aggregate_subject = str(clean(raw.get("Task Subject"), "")).strip()   # the project-level task to create
 
@@ -62,35 +63,27 @@ def on_task_completed(task):
                                 limit=1)
         if exists:
             continue
-
+        
+        
         # verify for every item in project.items that:
         #  - there exists an Item task with subject == dep_target
         #  - AND its status == "Completed"
         all_items_ok = True
         if not project.items:
             continue
+        
         for it in project.items or []:
-            # try with child docname (it.name), fallback to an item_code field if present
+            # try with child docname (it.item_name)
             found = frappe.get_all("Production Task",
                                    filters={
                                        "project": project.name,
-                                       "item": it.name,
+                                       "item": it.item_name,
                                        "task_subject": dep_target,
                                        "task_type": "Item"
                                    },
                                    fields=["status"],
                                    limit=1)
-            if not found and it.get("item_code"):
-                found = frappe.get_all("Production Task",
-                                       filters={
-                                           "project": project.name,
-                                           "item": it.get("item_code"),
-                                           "task_subject": dep_target,
-                                           "task_type": "Item"
-                                       },
-                                       fields=["status"],
-                                       limit=1)
-
+            
             if not found or found[0].get("status") != "Completed":
                 all_items_ok = False
                 break
@@ -101,3 +94,66 @@ def on_task_completed(task):
 
     # finally commit any changes
     frappe.db.commit()
+
+
+
+
+
+
+
+
+
+
+def update_milestone_progress(doc, method=None):
+    """Update milestones & project percentage when a Task is completed/cancelled."""
+    if not doc.project or doc.doctype != "Task":
+        return
+
+    project = frappe.get_doc("Production Project", doc.project)
+    recalc_project_progress(project)
+
+
+@frappe.whitelist()
+def recalc_project_progress(project):
+    """Recalculate all milestones & overall project completion %."""
+    if isinstance(project, str):
+        project = frappe.get_doc("Production Project", project)
+
+    total_weighted = 0
+    total_weights = 0
+
+    for milestone in project.milestones:  # child table inside Production Project
+        expected_tasks = get_expected_task_count(project, milestone)
+        completed, open_tasks = get_actual_task_status(project, milestone)
+
+        not_created = expected_tasks - (completed + open_tasks)
+        milestone.progress = (completed / expected_tasks * 100) if expected_tasks else 0
+
+        # Weight contribution
+        total_weighted += (milestone.progress or 0) * (milestone.weight or 1)
+        total_weights += (milestone.weight or 1)
+
+    # Update overall project completion %
+    project.percentage_completion = total_weighted / total_weights if total_weights else 0
+    project.save(ignore_permissions=True)
+    return project
+
+
+def get_expected_task_count(project, milestone):
+    """Return how many tasks *should* exist for this milestone."""
+    template_tasks = [t for t in project.template_file if t.milestone == milestone.milestone_name]
+    base_count = len(template_tasks)
+
+    if project.initialised_item_tasks:
+        return base_count * len(project.items)
+    return base_count
+
+
+def get_actual_task_status(project, milestone):
+    """Return (completed_count, open_count) for this milestone."""
+    filters = {"project": project.name, "milestone": milestone.milestone_name}
+    tasks = frappe.get_all("Task", filters=filters, fields=["status"])
+
+    completed = sum(1 for t in tasks if t.status == "Completed")
+    open_tasks = sum(1 for t in tasks if t.status not in ["Completed", "Cancelled"])
+    return completed, open_tasks

@@ -10,11 +10,13 @@
   "start_date",
   "template_file",
   "column_break_vkjv",
-  "status",
+  "percentage_completion",
   "section_break_bzoq",
   "items",
   "generate_item_tasks",
-  "initialised_item_tasks"
+  "initialised_item_tasks",
+  "section_break_febl",
+  "milestones"
  ],
  "fields": [
   {
@@ -30,17 +32,12 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Start Date",
+   "no_copy": 1,
    "reqd": 1
   },
   {
    "fieldname": "column_break_vkjv",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Percent",
-   "label": "Percentage Completion",
-   "read_only": 1
   },
   {
    "depends_on": "eval: !doc.initialised_item_tasks",
@@ -73,13 +70,33 @@
    "fieldname": "initialised_item_tasks",
    "fieldtype": "Check",
    "hidden": 1,
-   "label": "Initialised Item Tasks?"
+   "label": "Initialised Item Tasks?",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "section_break_febl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "milestones",
+   "fieldtype": "Table",
+   "label": "Milestones",
+   "no_copy": 1,
+   "options": "Production Project Milestone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "percentage_completion",
+   "fieldtype": "Percent",
+   "label": "Percentage Completion",
+   "no_copy": 1,
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-26 15:04:12.191146",
+ "modified": "2025-09-01 12:32:37.978958",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",
