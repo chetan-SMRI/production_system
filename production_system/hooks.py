@@ -117,13 +117,15 @@ app_license = "unlicense"
 # -----------
 # Permissions evaluated in scripted ways
 
-# permission_query_conditions = {
-# 	"Production Task": "production_system.permissions.task_permission_query",
-# }
+permission_query_conditions = {
+	"Production Task": "production_system.permissions.task_permission_query",
+	"Production Project": "production_system.permissions.project_permission_query",
+}
 
-# has_permission = {
-# 	"Production Task": "production_system.permissions.task_has_permission",
-# }
+has_permission = {
+	"Production Task": "production_system.permissions.task_has_permission",
+	"Production Project": "production_system.permissions.project_has_permission",
+}
 
 # DocType Class
 # ---------------

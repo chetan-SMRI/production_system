@@ -49,7 +49,8 @@
    "depends_on": "eval: !doc.initialised_item_tasks",
    "fieldname": "generate_item_tasks",
    "fieldtype": "Button",
-   "label": "Generate Item Tasks"
+   "label": "Generate Item Tasks",
+   "permlevel": 2
   },
   {
    "fetch_from": "choose_template.template_file",
@@ -69,6 +70,7 @@
    "fieldtype": "Table",
    "label": "Items",
    "options": "Production Item",
+   "permlevel": 1,
    "read_only_depends_on": "eval: doc.initialised_item_tasks"
   },
   {
@@ -112,13 +114,15 @@
    "depends_on": "eval: doc.initialised_item_tasks",
    "fieldname": "remove_a_item",
    "fieldtype": "Button",
-   "label": "Remove a Item"
+   "label": "Remove a Item",
+   "permlevel": 2
   },
   {
    "depends_on": "eval: doc.initialised_item_tasks",
    "fieldname": "add_new_item",
    "fieldtype": "Button",
-   "label": "Add New Item"
+   "label": "Add New Item",
+   "permlevel": 2
   },
   {
    "fieldname": "direct_tasks",
@@ -132,13 +136,14 @@
    "fieldname": "project_manager",
    "fieldtype": "Link",
    "label": "Project Manager",
-   "options": "User"
+   "options": "User",
+   "permlevel": 2
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-08 11:56:26.984658",
+ "modified": "2025-09-08 12:34:23.328754",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",
@@ -159,9 +164,72 @@
   },
   {
    "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 2,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 2,
    "print": 1,
    "read": 1,
    "report": 1,
@@ -173,5 +241,6 @@
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

@@ -96,7 +96,7 @@ def on_task_completed(task):
             
             if found and found.get("name") == task.name:
                 found['status'] = task.status
-            if (not found or found.get("status") != "Completed"):
+            if (not found or found.get("status") not in ["Completed", "Cancelled"]):
                 all_items_ok = False
                 break
             else:
@@ -172,7 +172,7 @@ def recalc_project_progress(project):
         completed = frappe.db.count("Production Task", {
             "project": project.name,
             "milestone": milestone.milestone_name,
-            "status": "Completed"
+            "status": ["in", ["Completed", "Cancelled"]]
         })
         open_tasks = frappe.db.count("Production Task", {
             "project": project.name,
