@@ -8,15 +8,20 @@
  "field_order": [
   "project_name",
   "start_date",
+  "choose_template",
   "template_file",
   "column_break_vkjv",
   "percentage_completion",
+  "project_manager",
   "section_break_bzoq",
   "items",
   "generate_item_tasks",
   "initialised_item_tasks",
+  "remove_a_item",
+  "add_new_item",
   "section_break_febl",
-  "milestones"
+  "milestones",
+  "direct_tasks"
  ],
  "fields": [
   {
@@ -33,7 +38,8 @@
    "in_list_view": 1,
    "label": "Start Date",
    "no_copy": 1,
-   "reqd": 1
+   "reqd": 1,
+   "set_only_once": 1
   },
   {
    "fieldname": "column_break_vkjv",
@@ -46,11 +52,12 @@
    "label": "Generate Item Tasks"
   },
   {
+   "fetch_from": "choose_template.template_file",
    "fieldname": "template_file",
    "fieldtype": "Attach",
+   "hidden": 1,
    "in_list_view": 1,
-   "label": "Excel Template File",
-   "reqd": 1
+   "label": "Excel Template File"
   },
   {
    "fieldname": "section_break_bzoq",
@@ -71,7 +78,8 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "Initialised Item Tasks?",
-   "no_copy": 1
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "section_break_febl",
@@ -91,12 +99,46 @@
    "label": "Percentage Completion",
    "no_copy": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "choose_template",
+   "fieldtype": "Link",
+   "label": "Choose Template",
+   "options": "Production Template",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "depends_on": "eval: doc.initialised_item_tasks",
+   "fieldname": "remove_a_item",
+   "fieldtype": "Button",
+   "label": "Remove a Item"
+  },
+  {
+   "depends_on": "eval: doc.initialised_item_tasks",
+   "fieldname": "add_new_item",
+   "fieldtype": "Button",
+   "label": "Add New Item"
+  },
+  {
+   "fieldname": "direct_tasks",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Direct Tasks",
+   "options": "Direct Tasks Childtable Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "project_manager",
+   "fieldtype": "Link",
+   "label": "Project Manager",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-01 12:32:37.978958",
+ "modified": "2025-09-08 11:56:26.984658",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",
@@ -112,6 +154,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects Manager",
    "share": 1,
    "write": 1
   }

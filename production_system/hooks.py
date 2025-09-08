@@ -118,11 +118,11 @@ app_license = "unlicense"
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+# 	"Production Task": "production_system.permissions.task_permission_query",
 # }
-#
+
 # has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
+# 	"Production Task": "production_system.permissions.task_has_permission",
 # }
 
 # DocType Class

@@ -4,10 +4,12 @@ from frappe.utils import add_days, getdate
 from frappe.model.document import Document
 
 class ProductionProject(Document):
+    def before_insert(self):
+        initialize_milestones(self)
+    
     def after_insert(self):
         # Run task creation engine on project creation
         create_initial_tasks(self)
-        initialize_milestones(self)
 
 
 def clean(val, default=None):
@@ -119,6 +121,6 @@ def initialize_milestones(doc):
             "weight": weight_each
         })
 
-    doc.save(ignore_permissions=True)
-    frappe.db.commit()
+    # doc.save(ignore_permissions=True)
+    # frappe.db.commit()
     return {"success": True, "milestones_created": total}

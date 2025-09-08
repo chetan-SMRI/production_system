@@ -1,33 +1,28 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-08-19 12:33:49.427858",
+ "creation": "2025-09-07 09:15:28.536932",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "column_break_brrx",
-  "item_name",
-  "qty"
+  "task",
+  "milestone"
  ],
  "fields": [
   {
-   "fieldname": "qty",
-   "fieldtype": "Int",
+   "fieldname": "task",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Quantity",
-   "non_negative": 1,
+   "label": "Task",
+   "options": "Production Task",
    "reqd": 1
   },
   {
-   "fieldname": "column_break_brrx",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "item_name",
+   "fieldname": "milestone",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Item Name",
+   "label": "Milestone",
    "reqd": 1
   }
  ],
@@ -35,10 +30,10 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-06 17:05:24.324572",
+ "modified": "2025-09-07 09:16:10.248775",
  "modified_by": "Administrator",
  "module": "Production System",
- "name": "Production Item",
+ "name": "Direct Tasks Childtable Project",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",
