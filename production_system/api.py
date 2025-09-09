@@ -52,7 +52,7 @@ def add_new_item_using_button(project_name,item_name,quantity):
             frappe.throw(f"Item '{item_name}' already exists in project '{project_name}'.")
     project.append("items",{
         "item_name":item_name,
-        "quantity":quantity
+        "qty":quantity
     })
     project.save(ignore_permissions=True)
     frappe.db.commit()  
@@ -127,7 +127,7 @@ def remove_item_using_button(project_name, item_name):
             #     continue
 
             # Delete the task (force=True to bypass permissions if necessary)
-            frappe.delete_doc("Production Task", t["name"], force=True)
+            frappe.delete_doc("Production Task", t["name"], force=True, ignore_permissions=True)
             deleted.append(t["name"])
         except Exception as e:
             # Log and continue — avoids aborting the whole operation for one failure
@@ -282,7 +282,6 @@ def delete_direct_task(project_name, task_name):
 
     # load project (fresh)
     project = frappe.get_doc("Production Project", project_name)
-    print(project_name,task_name)
     # find and remove matching direct_tasks row(s)
     removed = False
     for row in project.get("direct_tasks")[:]:
@@ -301,7 +300,7 @@ def delete_direct_task(project_name, task_name):
 
     # delete the task doc
     try:
-        frappe.delete_doc("Production Task", task_name, force=True)
+        frappe.delete_doc("Production Task", task_name, force=True, ignore_permissions=True)
         frappe.db.commit()
     except Exception as e:
         frappe.log_error(f"Failed deleting Production Task {task_name}: {e}", "delete_direct_task")

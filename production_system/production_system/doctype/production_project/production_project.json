@@ -137,13 +137,14 @@
    "fieldtype": "Link",
    "label": "Project Manager",
    "options": "User",
-   "permlevel": 2
+   "permlevel": 2,
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-08 12:34:23.328754",
+ "modified": "2025-09-08 18:02:41.619911",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",
