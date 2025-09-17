@@ -1,0 +1,95 @@
+{
+ "charts": [
+  {
+   "chart_name": "Task Line Chart Completed",
+   "label": "Completed Task List"
+  },
+  {
+   "chart_name": "Pie Task Status",
+   "label": "Task List"
+  }
+ ],
+ "content": "[{\"id\":\"eAH8xEdWqP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Production Desk</span>\",\"col\":12}},{\"id\":\"32zHMRPmq0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Pending\",\"col\":3}},{\"id\":\"SbRHyPrWp2\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task In Progress\",\"col\":3}},{\"id\":\"Qkfb89aOoO\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Completed\",\"col\":3}},{\"id\":\"WN_S7o4Um1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Cancelled\",\"col\":3}},{\"id\":\"MNxhUehgmM\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortcuts\",\"col\":4}},{\"id\":\"nwsN6ecuRe\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Task List\",\"col\":8}},{\"id\":\"IvuvhVAOSU\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Completed Task List\",\"col\":12}}]",
+ "creation": "2025-09-17 12:48:31.216004",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "heart-active",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Production Desk",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shortcuts",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project List",
+   "link_count": 0,
+   "link_to": "Production Project",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task List",
+   "link_count": 0,
+   "link_to": "Production Task",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Template List",
+   "link_count": 0,
+   "link_to": "Production Template",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2025-09-17 12:48:35.249153",
+ "modified_by": "Administrator",
+ "module": "Production System",
+ "name": "Production Desk",
+ "number_cards": [
+  {
+   "label": "Task Completed",
+   "number_card_name": "Task Completed"
+  },
+  {
+   "label": "Task In Progress",
+   "number_card_name": "Task In Progress"
+  },
+  {
+   "label": "Task Pending",
+   "number_card_name": "Task Pending"
+  },
+  {
+   "label": "Task Cancelled",
+   "number_card_name": "Task Cancelled"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [],
+ "title": "Production Desk"
+}

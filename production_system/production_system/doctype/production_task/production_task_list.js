@@ -7,7 +7,7 @@ frappe.listview_settings["Production Task"] = {
         return doc.status !== "Completed" && doc.status !== "Cancelled";
       },
       get_label: function() {
-        return __("Task Completed");
+        return __("Mark Completed");
       },
       get_description: function(doc) {
         return "Description";
