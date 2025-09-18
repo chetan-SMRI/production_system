@@ -9,6 +9,7 @@
   "project",
   "milestone",
   "task_subject",
+  "type",
   "task_type",
   "item",
   "assigned_to",
@@ -45,6 +46,7 @@
   },
   {
    "default": "Direct",
+   "description": "This is internal, between direct, or templatized",
    "fieldname": "task_type",
    "fieldtype": "Select",
    "hidden": 1,
@@ -100,12 +102,20 @@
    "label": "Completed By",
    "options": "User",
    "read_only": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-17 12:41:14.251147",
+ "modified": "2025-09-18 09:17:56.415995",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Task",

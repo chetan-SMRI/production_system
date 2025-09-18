@@ -67,7 +67,7 @@ def create_initial_tasks(project):
             if project.start_date:
                 task.start_date = project.start_date
 
-            
+            task.type = clean(row.get("Type"), "None")
             task.status = "Pending"
 
             task.insert(ignore_permissions=True)

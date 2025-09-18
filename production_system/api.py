@@ -172,6 +172,7 @@ def create_task_from_row(project, row, dependency_type=None, item=None):
         task.item = item
     task.assigned_to = assigned_to
     task.status = "Pending"
+    task.type = row.get("Type")
 
     # TAT / dates
     tat_days = clean(row.get("TAT (in days)"))
