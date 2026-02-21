@@ -19,7 +19,7 @@ def generate_item_tasks(project_name):
     # duplicate check - if same item is already present in project, then through error
     seen = set()
     for item in project.items:
-        name = (item.item_name or "").strip()
+        name = item.item_name.strip() + ' (UID: ' + str(item.uid).strip() + ')'
         if name in seen:
             frappe.throw(f"Duplicate item found: {name}")
         seen.add(name)
@@ -39,20 +39,22 @@ def generate_item_tasks(project_name):
         for _, row in df.iterrows():
             task_type = clean(row.get("Task Type"))
             dependency_type = clean(row.get("Dependency Type"), "None").strip()
-
+            name = item.item_name.strip() + ' (UID: ' + str(item.uid).strip() + ')'
             # ✅ Create only Item tasks with no dependency
             if task_type == "Item" and (not dependency_type or dependency_type == "None"):
-                create_task_from_row(project, row, dependency_type, item=item.item_name)
+                create_task_from_row(project, row, dependency_type, item=name)
 
 @frappe.whitelist()
-def add_new_item_using_button(project_name,item_name,quantity):
+def add_new_item_using_button(project_name,item_name,quantity, uid,type):
     project = frappe.get_doc("Production Project", project_name)
     for item in project.items:
         if item.item_name == item_name:
             frappe.throw(f"Item '{item_name}' already exists in project '{project_name}'.")
     project.append("items",{
         "item_name":item_name,
-        "qty":quantity
+        "qty":quantity,
+        "uid": uid,
+        "type": type
     })
     project.save(ignore_permissions=True)
     frappe.db.commit()  
@@ -196,7 +198,7 @@ def create_task_from_row(project, row, dependency_type=None, item=None):
 
 
 @frappe.whitelist()
-def create_direct_task(project_name, task_subject, start_date, due_date, assigned_to=None, milestone=None):
+def create_direct_task(project_name, task_subject, start_date, due_date, assigned_to=None, milestone=None, parent_task=None,attachment=None):
     """
     Creates a Production Task and appends it to Production Project.direct_tasks child table.
     Returns {"ok": True, "task_name": "..."} on success, otherwise raises frappe exceptions.
@@ -239,9 +241,12 @@ def create_direct_task(project_name, task_subject, start_date, due_date, assigne
         "assigned_to": assigned_to or "",
         "milestone": milestone,
         # set other defaults as needed
-        "status": "Pending"
+        "status": "Pending",
+        "attachment": attachment
     })
-
+    if parent_task:
+        task_doc.is_child = True
+        task_doc.parent_task = parent_task
     # Insert task
     task_doc.insert(ignore_permissions=True)
     # Ensure DB write

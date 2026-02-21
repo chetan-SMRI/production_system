@@ -13,12 +13,17 @@
   "task_type",
   "item",
   "assigned_to",
+  "is_parent",
+  "is_child",
+  "parent_task",
   "column_break_bnty",
   "status",
   "start_date",
   "due_date",
   "completion_time",
-  "completed_by"
+  "completed_by",
+  "attachment",
+  "connections_tab"
  ],
  "fields": [
   {
@@ -60,18 +65,21 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval: !doc.is_parent",
    "fieldname": "assigned_to",
    "fieldtype": "Link",
    "label": "Assigned To",
    "options": "User"
   },
   {
+   "depends_on": "eval: !doc.is_parent",
    "fieldname": "start_date",
    "fieldtype": "Datetime",
    "label": "Start Date",
    "read_only": 1
   },
   {
+   "depends_on": "eval: !doc.is_parent",
    "fieldname": "due_date",
    "fieldtype": "Datetime",
    "label": "Due Date",
@@ -84,19 +92,22 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Pending\nIn Progress\nCompleted\nCancelled"
+   "options": "Pending\nIn Progress\nCompleted\nCancelled",
+   "read_only_depends_on": "eval: doc.is_parent"
   },
   {
    "fieldname": "column_break_bnty",
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval: !doc.is_parent",
    "fieldname": "completion_time",
    "fieldtype": "Datetime",
    "label": "Completion/Cancellation Date",
    "read_only": 1
   },
   {
+   "depends_on": "eval: !doc.is_parent",
    "fieldname": "completed_by",
    "fieldtype": "Link",
    "label": "Completed By",
@@ -110,12 +121,49 @@
    "in_standard_filter": 1,
    "label": "Type",
    "read_only": 1
+  },
+  {
+   "depends_on": "eval: !doc.is_parent",
+   "fieldname": "attachment",
+   "fieldtype": "Attach",
+   "label": "Attachment"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: !doc.is_child",
+   "fieldname": "is_parent",
+   "fieldtype": "Check",
+   "label": "Is Parent?",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: !doc.is_parent",
+   "fieldname": "is_child",
+   "fieldtype": "Check",
+   "label": "Is Child?",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.is_child",
+   "fieldname": "parent_task",
+   "fieldtype": "Link",
+   "label": "Parent Task",
+   "options": "Production Task",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.is_parent",
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-18 09:17:56.415995",
+ "modified": "2026-02-19 15:01:52.149295",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Task",

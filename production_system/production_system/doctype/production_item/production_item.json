@@ -8,10 +8,13 @@
  "field_order": [
   "column_break_brrx",
   "item_name",
+  "uid",
+  "type",
   "qty"
  ],
  "fields": [
   {
+   "columns": 2,
    "default": "1",
    "fieldname": "qty",
    "fieldtype": "Int",
@@ -25,18 +28,37 @@
    "fieldtype": "Column Break"
   },
   {
+   "columns": 3,
    "fieldname": "item_name",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Item Name",
    "reqd": 1
+  },
+  {
+   "columns": 3,
+   "fieldname": "uid",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "UID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Type",
+   "options": "Furniture Type",
+   "reqd": 1,
+   "width": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-18 09:23:41.646422",
+ "modified": "2026-02-19 15:12:45.621568",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Item",

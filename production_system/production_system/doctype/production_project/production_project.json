@@ -13,6 +13,7 @@
   "column_break_vkjv",
   "percentage_completion",
   "project_manager",
+  "status",
   "section_break_bzoq",
   "items",
   "generate_item_tasks",
@@ -139,12 +140,20 @@
    "options": "User",
    "permlevel": 2,
    "reqd": 1
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Open\nClosed",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-08 18:02:41.619911",
+ "modified": "2025-09-18 09:46:12.845719",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",

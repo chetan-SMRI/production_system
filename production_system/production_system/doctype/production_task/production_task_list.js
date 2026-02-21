@@ -1,6 +1,138 @@
 
 
 frappe.listview_settings["Production Task"] = {
+  	onload: function(listview) {
+      // Hide frappe's default assigned to
+      setTimeout(() => {
+
+        // Hide the entire left sidebar
+        $(".layout-side-section").remove();
+
+        // Expand the main content to full width
+        $(".layout-main-section").removeClass("col-lg-10").addClass("col-lg-12");
+
+      }, 300);
+      setTimeout(() => {
+
+        $(".group-by-field").each(function () {
+          let label = $(this).find("span.ellipsis").text().trim();
+
+          if (label === "Assigned To") {
+            $(this).hide();
+          }
+        });
+
+      }, 800);
+
+      // Add custom button
+
+      listview.page.add_action_item(__("Bulk Assign"), function() {
+          const selected = listview.get_checked_items();
+
+          if (selected.length === 0) {
+              frappe.msgprint("Please select at least one task.");
+              return;
+          }
+
+          const dialog = new frappe.ui.Dialog({
+              title: 'Assign Tasks To',
+              fields: [
+                  {
+                      label: 'Assign To',
+                      fieldname: 'assign_to',
+                      fieldtype: 'Link',
+                      options: 'User',
+                      reqd: true
+                  }
+              ],
+              primary_action_label: 'Proceed',
+              primary_action: function (values) {
+                  dialog.hide();
+
+                  frappe.confirm(
+                      `Are you sure you want to assign ${selected.length} tasks to ${values.assign_to}?`,
+                      async () => {
+                          for (let row of selected) {
+                              await frappe.call({
+                                  method: "frappe.client.set_value",
+                                  args: {
+                                      doctype: "Production Task",
+                                      name: row.name,
+                                      fieldname: {
+                                          "assigned_to": values.assign_to
+                                      }
+                                  },
+                                  callback: function (r) {
+                                      if (!r.exc) {
+                                          frappe.show_alert(`${row.name} updated`);
+                                      }
+                                  }
+                              });
+                          }
+
+                          listview.refresh();
+                      }
+                  );
+              }
+          });
+
+          dialog.show();
+
+      });
+      listview.page.add_action_item(__("Set Due Date"), function() {
+          const selected = listview.get_checked_items();
+
+          if (selected.length === 0) {
+              frappe.msgprint("Please select at least one task.");
+              return;
+          }
+
+          const dialog = new frappe.ui.Dialog({
+              title: 'Set Due Date',
+              fields: [
+                  {
+                      label: 'Due Date',
+                      fieldname: 'due_date',
+                      fieldtype: 'Date',
+                      reqd: true
+                  }
+              ],
+              primary_action_label: 'Proceed',
+              primary_action: function (values) {
+                  dialog.hide();
+
+                  frappe.confirm(
+                      `Are you sure you want to set the due date for ${selected.length} tasks to ${values.due_date}?`,
+                      async () => {
+                          for (let row of selected) {
+                              await frappe.call({
+                                  method: "frappe.client.set_value",
+                                  args: {
+                                      doctype: "Production Task",
+                                      name: row.name,
+                                      fieldname: {
+                                          "due_date": values.due_date
+                                      }
+                                  },
+                                  callback: function (r) {
+                                      if (!r.exc) {
+                                          frappe.show_alert(`${row.name} updated`);
+                                      }
+                                  }
+                              });
+                          }
+
+                          listview.refresh();
+                      }
+                  );
+              }
+          });
+
+          dialog.show();
+
+      });
+	},
+
   hide_name_column: true,
     button: {
       show: function(doc) {

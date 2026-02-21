@@ -14,6 +14,7 @@ frappe.ui.form.on("Production Project", {
 
 		if (isSystemManager || isProjectManager) {
 			// Black "Create a Task" button with a plus icon
+
 			frm.add_custom_button(
 				'<i class="fa fa-plus"></i> Create a Task',
 				() => open_create_direct_task_dialog(frm),
@@ -30,6 +31,17 @@ frappe.ui.form.on("Production Project", {
 			)
 				.removeClass("btn-default")
 				.addClass("btn-danger");
+
+			frm.add_custom_button(
+				"Close Project",
+				() => close_project(frm),
+			).removeClass("btn-default").addClass("btn-danger");
+		}
+		if (isSystemManager){
+			frm.add_custom_button(
+				"Delete Project",
+				() => delete_project(frm),
+			).removeClass("btn-default").addClass("btn-danger");
 		}
 	},
 
@@ -91,7 +103,82 @@ frappe.ui.form.on("Production Project", {
 		open_remove_item_dialog(frm);
 	},
 });
+function close_project(frm) {
+	frappe.confirm(
+				__(
+					"Close project midway? Are you sure about your action, once closed, only System Managers can make it active again."
+				),
+				function () {
+					frappe.call({
+						method: "production_system.api.delete_direct_task",
+						args: {
+							project_name: frm.doc.name,
+							task_name: task_name,
+						},
+						freeze: true,
+						freeze_message: __("Deleting task..."),
+						callback: function (r) {
+							if (!r.exc && r.message && r.message.ok) {
+								d.hide();
+								frappe.show_alert({
+									message: __("Task deleted"),
+									indicator: "green",
+								});
+								// reload to reflect removed row
+								frm.reload_doc && frm.reload_doc();
+							} else {
+								const msg =
+									(r.message && r.message.message) ||
+									__("Could not delete task");
+								frappe.msgprint({
+									title: __("Error"),
+									message: msg,
+									indicator: "red",
+								});
+							}
+						},
+					});
+				},
+				function () {
+					// cancelled
+				}
+			);
+	d.show();
+}
 
+function delete_project(frm) {
+	frappe.confirm(
+				__(
+					"Are you sure about deleting the project? (Note: This will also delete very task created.)"
+				),
+				function () {
+					frappe.call({
+						method: "production_system.apis.project_apis.delete_project",
+						args: {
+							project_name: frm.doc.name,
+						},
+						timeout: 600000,
+						freeze: true,
+						freeze_message: __("Deleting project..."),
+						callback: function (r) {
+							if (r.exc) {
+								frappe.msgprint({ title: __('Error'), message: __('Deletion failed. See console for details.'), indicator: 'red' });
+								console.error(r.exc);
+								return;
+							}
+							const msg = (r.message && r.message.message) ? r.message.message : __('Deletion request completed.');
+							window.location.href = "/app/production-project";
+							frappe.msgprint({ title: __('Done'), message: msg, indicator: 'green' });
+							try { frm.reload_doc(); } catch (e) { console.warn(e); }
+						},
+					});
+				},
+				function () {
+					// cancelled
+				}
+			);
+	d.show();
+}
 // Opens "Add New Item" dialog and calls server on submit
 function open_add_item_dialog(frm) {
 	const d = new frappe.ui.Dialog({
@@ -101,6 +188,19 @@ function open_add_item_dialog(frm) {
 				fieldtype: "Data",
 				fieldname: "item_name",
 				label: __("Item Name"),
+				reqd: 1,
+			},
+			{
+				fieldtype: "Data",
+				fieldname: "uid",
+				label: __("UID"),
+				reqd: 1,
+			},
+			{
+				fieldtype: "Link",
+				fieldname: "type",
+				label: __("Type"),
+				options: 'Furniture Type',
 				reqd: 1,
 			},
 			{
@@ -125,6 +225,8 @@ function open_add_item_dialog(frm) {
 				args: {
 					project_name: frm.doc.name,
 					item_name: values.item_name,
+					uid: values.uid,
+					type: values.type,
 					quantity: values.quantity,
 				},
 				freeze: true,
@@ -360,6 +462,11 @@ function open_create_direct_task_dialog(frm) {
 				label: __("Assign To"),
 			},
 			{
+				fieldtype: "Attach",
+				fieldname: "attachment",
+				label: __("Attachment"),
+			},
+			{
 				fieldtype: "Select",
 				fieldname: "milestone",
 				label: __("Milestone"),
@@ -390,6 +497,7 @@ function open_create_direct_task_dialog(frm) {
 					due_date: values.due_date,
 					assigned_to: values.assigned_to || "",
 					milestone: values.milestone,
+					attachment: values.attachment
 				},
 				freeze: true,
 				freeze_message: __("Creating task and linking to project..."),

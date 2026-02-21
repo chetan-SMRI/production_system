@@ -44,14 +44,15 @@ def create_initial_tasks(project):
         tat_based_on = clean(row.get("TAT Based On"), "Task Creation Date")
 
         # Only create tasks without dependencies
-        if task_type == "Project" and (not dependency_type or dependency_type == "None"):
+        if (task_type == "Project" or task_type == "Project-Parent") and (not dependency_type or dependency_type == "None"):
             task = frappe.new_doc("Production Task")
             task.project = project.name
             task.milestone = clean(row.get("Milestone"))
             task.type = clean(row.get("Type"))
             task.task_subject = clean(row.get("Task Subject"))
-            task.task_type = clean(row.get("Task Type"))
+            task.task_type = "Project" if clean(row.get("Task Type")) == "Project-Parent" else clean(row.get("Task Type"))
             task.assigned_to = clean(row.get("Assigned To"))
+            task.is_parent = True if clean(row.get("Task Type")) == "Project-Parent" else False
 
             # Calculate Expected End Date
             tat_days = clean(row.get("TAT (in days)"))

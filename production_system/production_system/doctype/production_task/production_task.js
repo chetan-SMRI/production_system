@@ -6,5 +6,10 @@ frappe.ui.form.on("Production Task", {
 		if(frm.doc.status === "Completed" || frm.doc.status === "Cancelled") {
 			frm.disable_save();
 		}
+		// Wait for sidebar to render
+		setTimeout(() => {
+			// Hide the full Assigned To section
+			$(".form-assignments").hide();
+		}, 0);
 	},
 });

@@ -9,14 +9,44 @@ class ProductionTask(Document):
             on_task_completed(doc)
             doc.completion_time = now()
             doc.completed_by = frappe.session.user
+        if doc.is_parent:
+            doc.update_parent_progress()
     
     def on_update(doc):
         update_milestone_progress(doc)
+        if doc.is_child:
+            pt = frappe.get_doc('Production Task', doc.parent_task)
+            pt.update_parent_progress()
+            pt.save()
+
     
+    def update_parent_progress(doc):
+        child_tasks = frappe.get_all('Production Task', [['parent_task', '=', doc.name]], ['name','status'])
+        total_tasks = len(child_tasks)
+        completed_tasks = 0
+        for each in child_tasks:
+            if each.get('status') in ['Completed','Cancelled']:
+                completed_tasks += 1
+        if total_tasks == 0:
+            perc = 0
+            # doc.percentage_completion = 0
+            doc.status = 'Pending'
+        else:
+            doc.status = 'Pending'
+            perc = 100*(completed_tasks/total_tasks)
+            # doc.percentage_completion = perc
+            if perc > 0 and perc < 100:
+                doc.status = 'In Progress'
+            elif perc == 100:
+                doc.status = 'Completed'
+        # doc.save()
     # def on_trash(doc):
     #     update_milestone_progress(doc)
     
 
+# def update_parent_progress(doc):
+#     pt = frappe.get_doc('Production Task', doc.parent_task)
+#     pt.calculate_parent_progress()
 
 def on_task_completed(task):
     """
@@ -83,10 +113,11 @@ def on_task_completed(task):
 
         for it in project.items or []:
             # try with child docname (it.item_name)
+            name = it.item_name.strip() + ' (UID: ' + str(it.uid).strip() + ')'
             found = frappe.get_value("Production Task",
                                    {
                                        "project": project.name,
-                                       "item": it.item_name,
+                                       "item": name,
                                        "task_subject": dep_target,
                                        "task_type": "Item"
                                    },
@@ -161,7 +192,7 @@ def recalc_project_progress(project):
         direct_task_count = len(get_direct_tasks_for_milestone(project,milestone.milestone_name)) # get if any direct task also exists for the milestone(manually created task)
         base_count += direct_task_count
         item_task_count = len(item_tasks)
-        
+        print(base_count,item_task_count)
         project_task_count = base_count - item_task_count
         if project.initialised_item_tasks:
             expected_tasks = project_task_count + (item_task_count * len(project.items))
@@ -172,12 +203,14 @@ def recalc_project_progress(project):
         completed = frappe.db.count("Production Task", {
             "project": project.name,
             "milestone": milestone.milestone_name,
-            "status": ["in", ["Completed", "Cancelled"]]
+            "status": ["in", ["Completed", "Cancelled"]],
+            "is_parent": False
         })
         open_tasks = frappe.db.count("Production Task", {
             "project": project.name,
             "milestone": milestone.milestone_name,
-            "status": ["not in", ["Completed", "Cancelled"]]
+            "status": ["not in", ["Completed", "Cancelled"]],
+            "is_parent": False
         })
 
         # any remaining = not yet created
