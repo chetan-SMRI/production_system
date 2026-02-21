@@ -85,7 +85,7 @@ def on_task_completed(task):
         # Item-level dependency -> only when the completed task is an Item task
         if dep_type == "Task(Item)" and task.task_type == "Item" and dep_target == completed_subject:
             # create for the same item as the completed task
-            create_task_from_row(project, raw, dependency_type="Task(Item)", item=task.item)
+            create_task_from_row(project, raw, dependency_type="Task(Item)", item=task.item, furniture_type=task.furniture_type)
 
     # 2) Handle Aggregate rows: ensure every project item has the dependency_target task and is Completed
     for _, raw in df.iterrows():

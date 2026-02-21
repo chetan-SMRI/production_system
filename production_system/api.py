@@ -42,7 +42,7 @@ def generate_item_tasks(project_name):
             name = item.item_name.strip() + ' (UID: ' + str(item.uid).strip() + ')'
             # ✅ Create only Item tasks with no dependency
             if task_type == "Item" and (not dependency_type or dependency_type == "None"):
-                create_task_from_row(project, row, dependency_type, item=name)
+                create_task_from_row(project, row, dependency_type, item=name, furniture_type=item.type)
 
 @frappe.whitelist()
 def add_new_item_using_button(project_name,item_name,quantity, uid,type):
@@ -145,7 +145,7 @@ def remove_item_using_button(project_name, item_name):
         "errors": errors,
     }
 
-def create_task_from_row(project, row, dependency_type=None, item=None):
+def create_task_from_row(project, row, dependency_type=None, item=None, furniture_type=None):
     """
     Create a Production Task from an excel row. Skip if identical task already exists.
     Returns the task doc (existing or new).
@@ -172,6 +172,7 @@ def create_task_from_row(project, row, dependency_type=None, item=None):
     task.task_type = task_type
     if item:
         task.item = item
+        task.furniture_type = furniture_type
     task.assigned_to = assigned_to
     task.status = "Pending"
     task.type = row.get("Type")

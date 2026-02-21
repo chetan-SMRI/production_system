@@ -12,6 +12,7 @@
   "type",
   "task_type",
   "item",
+  "furniture_type",
   "assigned_to",
   "is_parent",
   "is_child",
@@ -158,12 +159,19 @@
    "fieldtype": "Tab Break",
    "label": "Connections",
    "show_dashboard": 1
+  },
+  {
+   "fieldname": "furniture_type",
+   "fieldtype": "Link",
+   "label": "Furniture Type",
+   "options": "Furniture Type",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-19 15:01:52.149295",
+ "modified": "2026-02-21 15:53:35.960596",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Task",
