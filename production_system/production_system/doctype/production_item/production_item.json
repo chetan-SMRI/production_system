@@ -9,7 +9,7 @@
   "column_break_brrx",
   "item_name",
   "uid",
-  "type",
+  "furniture_type",
   "qty"
  ],
  "fields": [
@@ -45,10 +45,10 @@
    "unique": 1
   },
   {
-   "fieldname": "type",
+   "fieldname": "furniture_type",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Type",
+   "label": "Furniture Type",
    "options": "Furniture Type",
    "reqd": 1,
    "width": "2"
@@ -58,7 +58,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-02-19 15:12:45.621568",
+ "modified": "2026-02-21 16:18:36.619285",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Item",

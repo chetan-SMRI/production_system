@@ -42,19 +42,21 @@ def generate_item_tasks(project_name):
             name = item.item_name.strip() + ' (UID: ' + str(item.uid).strip() + ')'
             # ✅ Create only Item tasks with no dependency
             if task_type == "Item" and (not dependency_type or dependency_type == "None"):
-                create_task_from_row(project, row, dependency_type, item=name, furniture_type=item.type)
+                create_task_from_row(project, row, dependency_type, item=name, furniture_type=item.furniture_type)
 
 @frappe.whitelist()
-def add_new_item_using_button(project_name,item_name,quantity, uid,type):
+def add_new_item_using_button(project_name,item_name,quantity, uid,furniture_type):
     project = frappe.get_doc("Production Project", project_name)
     for item in project.items:
         if item.item_name == item_name:
             frappe.throw(f"Item '{item_name}' already exists in project '{project_name}'.")
+    name = item_name.strip() + ' (UID: ' + str(uid).strip() + ')'
+
     project.append("items",{
         "item_name":item_name,
         "qty":quantity,
         "uid": uid,
-        "type": type
+        "furniture_type": furniture_type
     })
     project.save(ignore_permissions=True)
     frappe.db.commit()  
@@ -71,7 +73,7 @@ def add_new_item_using_button(project_name,item_name,quantity, uid,type):
 
         # ✅ Create only Item tasks with no dependency
         if task_type == "Item" and (not dependency_type or dependency_type == "None"):
-            create_task_from_row(project, row, dependency_type, item=item_name)
+            create_task_from_row(project, row, dependency_type, item=name,furniture_type=furniture_type)
 
 
 
@@ -91,9 +93,11 @@ def remove_item_using_button(project_name, item_name):
 
     # Remove matching child rows from items (iterate over a slice copy)
     removed_any = False
+    name = ""
     for child in project.items[:]:
         # comparing trimmed values helps avoid whitespace mismatch
         if (child.get("item_name") or "").strip() == (item_name or "").strip():
+            name = child.item_name.strip() + ' (UID: ' + str(child.uid).strip() + ')'
             project.remove(child)
             removed_any = True
 
@@ -110,7 +114,7 @@ def remove_item_using_button(project_name, item_name):
         "Production Task",
         filters={
             "project": project_name,
-            "item": item_name,
+            "item": name,
             "task_type": "Item",
         },
         fields=["name", "status"],
