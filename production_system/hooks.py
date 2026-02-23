@@ -244,3 +244,6 @@ has_permission = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+	{'dt': 'Client Script', 'filters': {'name': ('in',['CustomOrderSampleSelector'])}},
+]
