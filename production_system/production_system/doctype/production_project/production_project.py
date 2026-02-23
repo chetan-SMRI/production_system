@@ -10,6 +10,12 @@ class ProductionProject(Document):
     def after_insert(self):
         # Run task creation engine on project creation
         create_initial_tasks(self)
+        
+    def before_save(self):
+        if self.percentage_completion == 100:
+            self.status = "Closed"
+        else:
+            self.status = "Open"
 
 
 def clean(val, default=None):

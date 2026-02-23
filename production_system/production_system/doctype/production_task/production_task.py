@@ -185,7 +185,7 @@ def recalc_project_progress(project):
 
     for milestone in project.milestones:
         # ---- expected count from template ----
-        template_rows = df[df["Milestone"].astype(str).str.strip() == milestone.milestone_name.strip()]
+        template_rows = df[df["Milestone"].astype(str).str.strip() == milestone.milestone_name.strip()][df["Task Type"].astype(str).str.strip() != "Project-Parent"]
         base_count = len(template_rows)
         item_tasks = df[df["Milestone"].astype(str).str.strip() == milestone.milestone_name.strip()][df["Task Type"].astype(str).str.strip() == "Item"]
 

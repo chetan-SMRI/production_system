@@ -136,13 +136,14 @@ frappe.listview_settings["Production Task"] = {
   hide_name_column: true,
     button: {
       show: function(doc) {
-        return doc.status !== "Completed" && doc.status !== "Cancelled";
+        console.log(doc.is_parent,doc.status)
+        return (doc.status !== "Completed" && doc.status !== "Cancelled") && !doc.is_parent;
       },
       get_label: function() {
         return __("Mark Completed");
       },
       get_description: function(doc) {
-        return "Description";
+        return "Complete Task";
       },
       action: function(doc) {
         frappe.call({
@@ -161,13 +162,20 @@ frappe.listview_settings["Production Task"] = {
             });
             // refresh the list view row so button disappears
             cur_list.refresh();
+            //update once more after 100ms
+            setTimeout(() => {
+              cur_list.refresh();
+            }, 100);
+            setTimeout(() => {
+              cur_list.refresh();
+            }, 500);
           }
         },
       });
       }
   },
 
-  add_fields: ["due_date","task_type","item","milestone"],
+  add_fields: ["due_date","task_type","item","milestone", "is_parent"],
 
   formatters: {
     due_date: function (value, df, row, data) {
