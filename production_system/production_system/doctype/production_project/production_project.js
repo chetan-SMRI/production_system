@@ -181,75 +181,230 @@ function delete_project(frm) {
 }
 // Opens "Add New Item" dialog and calls server on submit
 function open_add_item_dialog(frm) {
+	let parsed_items = [];
+
 	const d = new frappe.ui.Dialog({
 		title: __("Add New Item"),
 		fields: [
 			{
+				fieldtype: "Select",
+				fieldname: "mode",
+				label: __("Mode"),
+				options: ["Single", "Bulk"],
+				default: "Single",
+				reqd: 1,
+				change: function () {
+					toggle_fields();
+				},
+			},
+
+			// -------- SINGLE MODE --------
+			{
+				fieldtype: "Section Break",
+				label: __("Single Item"),
+				fieldname: "single_section",
+			},
+			{
 				fieldtype: "Data",
 				fieldname: "item_name",
 				label: __("Item Name"),
-				reqd: 1,
 			},
 			{
 				fieldtype: "Data",
 				fieldname: "uid",
 				label: __("UID"),
-				reqd: 1,
 			},
 			{
 				fieldtype: "Link",
 				fieldname: "furniture_type",
 				label: __("Furniture Type"),
-				options: 'Furniture Type',
-				reqd: 1,
+				options: "Furniture Type",
 			},
 			{
 				fieldtype: "Int",
 				fieldname: "quantity",
 				label: __("Quantity"),
-				reqd: 1,
 				default: 1,
 			},
+
+			// -------- BULK MODE --------
+			{
+				fieldtype: "Section Break",
+				label: __("Bulk Upload"),
+				fieldname: "bulk_section",
+			},
+			{
+				fieldtype: "Attach",
+				fieldname: "csv_file",
+				label: __("Upload CSV"),
+			},
+			{
+				fieldtype: "HTML",
+				fieldname: "preview_html",
+			},
 		],
+
 		primary_action_label: __("Save"),
 		primary_action(values) {
-			// values contains { item_name, quantity }
-			if (!values.item_name || !values.quantity) {
-				frappe.msgprint(__("Please fill both fields."));
-				return;
+			if (values.mode === "Single") {
+				create_single(values);
+			} else {
+				create_bulk();
 			}
-
-			// call your server method
-			frappe.call({
-				method: "production_system.api.add_new_item_using_button",
-				args: {
-					project_name: frm.doc.name,
-					item_name: values.item_name,
-					uid: values.uid,
-					furniture_type: values.furniture_type,
-					quantity: values.quantity,
-				},
-				freeze: true,
-				freeze_message: __("Generating Item Tasks..."),
-				callback: function (r) {
-					if (!r.exc) {
-						d.hide();
-						frappe.msgprint({
-							title: __("Success"),
-							message: __("Item task has been initialized successfully."),
-							indicator: "green",
-						});
-						// optional: refresh the form or run a function
-						frm.reload_doc && frm.reload_doc();
-					}
-				},
-			});
 		},
 	});
 
-	d.show();
-}
+	// ---------------- TOGGLE ----------------
+	function toggle_fields() {
+		let mode = d.get_value("mode");
 
+		let single = mode === "Single";
+		let bulk = mode === "Bulk";
+
+		["item_name", "uid", "furniture_type", "quantity", "single_section"].forEach(f =>
+			d.set_df_property(f, "hidden", !single)
+		);
+		d.set_df_property("bulk_section", "hidden", !bulk);
+		d.set_df_property("csv_file", "hidden", !bulk);
+		d.set_df_property("preview_html", "hidden", !bulk);
+	}
+
+	// ---------------- SINGLE ----------------
+	function create_single(values) {
+		if (!values.item_name || !values.quantity || !values.furniture_type || !values.uid) {
+			frappe.msgprint(__("Please fill required fields."));
+			return;
+		}
+
+		frappe.call({
+			method: "production_system.api.add_new_item_using_button",
+			args: {
+				project_name: frm.doc.name,
+				item_name: values.item_name,
+				uid: values.uid,
+				furniture_type: values.furniture_type,
+				quantity: values.quantity,
+			},
+			freeze: true,
+			callback: () => {
+				d.hide();
+				frm.reload_doc();
+			},
+		});
+	}
+
+	// ---------------- BULK PARSE ----------------
+	d.fields_dict.csv_file.df.onchange = function () {
+		let file = d.get_value("csv_file");
+		if (!file) return;
+
+		fetch(file)
+			.then(res => res.text())
+			.then(text => {
+				parsed_items = parse_csv(text);
+				render_preview(parsed_items);
+			});
+	};
+
+	function parse_csv(text) {
+		let lines = text.split("\n").map(l => l.trim());
+
+		// -------- STEP 1: FIND START AFTER ------
+		let dashIndex = lines.findIndex(l => l.includes("------"));
+
+		if (dashIndex !== -1) {
+			lines = lines.slice(dashIndex + 1);
+		}
+
+		// remove empty lines
+		lines = lines.filter(l => l);
+
+		if (!lines.length) return [];
+
+		// -------- STEP 2: ENSURE CSV FORMAT
+		// Must contain commas
+		if (!lines[0].includes(",")) {
+			frappe.msgprint(__("Invalid CSV format. Please upload a proper comma-separated file."));
+			return [];
+		}
+
+		// -------- STEP 3: REMOVE HEADER
+		let header = lines[0].toLowerCase();
+		if (
+			header.includes("item") &&
+			header.includes("uid")
+		) {
+			lines.shift();
+		}
+
+		// -------- STEP 4: PARSE
+		let data = [];
+
+		lines.forEach((line, index) => {
+			let row = line.split(",").map(v => v.trim());
+
+			// Skip invalid rows
+			if (!row[0] || !row[1]) return;
+
+			data.push({
+				item_name: row[0],
+				uid: row[1],
+				furniture_type: row[2],
+				quantity: parseInt(row[3] || 1),
+			});
+		});
+
+		return data;
+	}
+
+	function render_preview(items) {
+		let html = `<table class="table table-bordered">
+			<tr>
+				<th>Item Name</th>
+				<th>UID</th>
+				<th>Furniture Type</th>
+				<th>Qty</th>
+			</tr>`;
+
+		items.forEach(i => {
+			html += `<tr>
+				<td>${i.item_name}</td>
+				<td>${i.uid}</td>
+				<td>${i.furniture_type}</td>
+				<td>${i.quantity}</td>
+			</tr>`;
+		});
+
+		html += "</table>";
+
+		d.fields_dict.preview_html.$wrapper.html(html);
+	}
+
+	// ---------------- BULK CREATE ----------------
+	function create_bulk() {
+		if (!parsed_items.length) {
+			frappe.msgprint(__("Please upload valid CSV."));
+			return;
+		}
+
+		frappe.call({
+			method: "production_system.api.bulk_add_items",
+			args: {
+				project_name: frm.doc.name,
+				items: parsed_items,
+			},
+			freeze: true,
+			freeze_message: __("Creating Items..."),
+			callback: () => {
+				d.hide();
+				frm.reload_doc();
+			},
+		});
+	}
+
+	d.show();
+	toggle_fields();
+}
 function open_remove_item_dialog(frm) {
 	// Collect items from child table (ensure child table exists)
 	const items = Array.isArray(frm.doc.items) ? frm.doc.items : [];

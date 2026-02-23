@@ -1,3 +1,4 @@
+import json
 import frappe
 from frappe import _
 import pandas as pd
@@ -75,7 +76,12 @@ def add_new_item_using_button(project_name,item_name,quantity, uid,furniture_typ
         if task_type == "Item" and (not dependency_type or dependency_type == "None"):
             create_task_from_row(project, row, dependency_type, item=name,furniture_type=furniture_type)
 
-
+@frappe.whitelist()
+def bulk_add_items(project_name,items):
+    if isinstance(items, str):
+        items = json.loads(items)
+    for each in items:
+        add_new_item_using_button(project_name,each.get('item_name'),each.get('quantity'),each.get('uid'),each.get('furniture_type'))
 
 @frappe.whitelist()
 def remove_item_using_button(project_name, item_name):
