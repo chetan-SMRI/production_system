@@ -246,4 +246,5 @@ has_permission = {
 
 fixtures = [
 	{'dt': 'Client Script', 'filters': {'name': ('in',['CustomOrderSampleSelector'])}},
+	{'dt': 'List View Settings', 'filters': {'name': ('in', ['Production Project', 'Production Task'])}}
 ]

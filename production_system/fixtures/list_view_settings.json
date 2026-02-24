@@ -1,0 +1,30 @@
+[
+ {
+  "allow_edit": 0,
+  "disable_auto_refresh": 0,
+  "disable_automatic_recency_filters": 0,
+  "disable_comment_count": 0,
+  "disable_count": 0,
+  "disable_sidebar_stats": 0,
+  "docstatus": 0,
+  "doctype": "List View Settings",
+  "fields": "[{\"fieldname\":\"name\",\"label\":\"ID\"},{\"fieldname\":\"project\",\"label\":\"Project\"},{\"fieldname\":\"task_subject\",\"label\":\"Task Subject\"},{\"fieldname\":\"due_date\",\"label\":\"Due Date\"}]",
+  "modified": "2025-09-07 09:24:26.387565",
+  "name": "Production Task",
+  "total_fields": "10"
+ },
+ {
+  "allow_edit": 0,
+  "disable_auto_refresh": 0,
+  "disable_automatic_recency_filters": 0,
+  "disable_comment_count": 1,
+  "disable_count": 0,
+  "disable_sidebar_stats": 1,
+  "docstatus": 0,
+  "doctype": "List View Settings",
+  "fields": "[{\"fieldname\":\"name\",\"label\":\"ID\"},{\"fieldname\":\"project_name\",\"label\":\"Project Name\"},{\"fieldname\":\"start_date\",\"label\":\"Start Date\"},{\"fieldname\":\"percentage_completion\",\"label\":\"Percentage Completion\"},{\"fieldname\":\"project_manager\",\"label\":\"Project Manager\"}]",
+  "modified": "2026-02-24 09:23:08.745897",
+  "name": "Production Project",
+  "total_fields": "7"
+ }
+]
