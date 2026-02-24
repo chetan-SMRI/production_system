@@ -136,7 +136,6 @@ frappe.listview_settings["Production Task"] = {
   hide_name_column: true,
     button: {
       show: function(doc) {
-        console.log(doc.is_parent,doc.status)
         return (doc.status !== "Completed" && doc.status !== "Cancelled") && !doc.is_parent;
       },
       get_label: function() {

@@ -116,14 +116,14 @@
    "fieldname": "remove_a_item",
    "fieldtype": "Button",
    "label": "Remove a Item",
-   "permlevel": 2
+   "permlevel": 3
   },
   {
    "depends_on": "eval: doc.initialised_item_tasks",
    "fieldname": "add_new_item",
    "fieldtype": "Button",
    "label": "Add New Item",
-   "permlevel": 2
+   "permlevel": 3
   },
   {
    "fieldname": "direct_tasks",
@@ -153,7 +153,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-18 09:46:12.845719",
+ "modified": "2026-02-23 20:21:03.569505",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",
@@ -179,7 +179,18 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects Manager",
+   "role": "Production Studio Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Project Manager",
    "share": 1,
    "write": 1
   },
@@ -189,7 +200,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects User",
+   "role": "Production Project User",
    "share": 1,
    "write": 1
   },
@@ -211,7 +222,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects Manager",
+   "role": "Production Studio Manager",
    "share": 1,
    "write": 1
   },
@@ -222,7 +233,18 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects User",
+   "role": "Production Project Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Project User",
    "share": 1
   },
   {
@@ -243,7 +265,30 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects Manager",
+   "role": "Production Studio Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 2,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Project Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "permlevel": 3,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
    "share": 1,
    "write": 1
   }

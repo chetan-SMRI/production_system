@@ -14,7 +14,7 @@ def task_permission_query(user=None):
 
 	roles = frappe.get_roles(user)
 	# System Manager -> no restriction
-	if "System Manager" in roles:
+	if "System Manager" in roles or "Production Studio Manager" in roles:
 		return None
 
 	user_escaped = frappe.db.escape(user)
@@ -50,7 +50,7 @@ def task_has_permission(doc, user=None, ptype=None):
 
 	# System Manager -> full access
 	roles = frappe.get_roles(user)
-	if "System Manager" in roles:
+	if "System Manager" in roles or "Production Studio Manager" in roles:
 		return True
 
 	# If the task's project has project_manager == user -> access allowed
@@ -73,7 +73,7 @@ def task_has_permission(doc, user=None, ptype=None):
 def project_permission_query(user=None):
     """
     Return SQL WHERE fragment (string) to restrict Production Project list results:
-      - System Manager: no restriction (None)
+      - System Manager/Studio Manager: no restriction (None)
       - If project.project_manager == user -> visible
       - If user has role 'Projects User' and there exists a Production Task in that project
         with assigned_to == user -> visible
@@ -82,7 +82,7 @@ def project_permission_query(user=None):
         user = frappe.session.user
 
     roles = frappe.get_roles(user)
-    if "System Manager" in roles:
+    if "System Manager" in roles or "Production Studio Manager" in roles:
         return None
 
     user_escaped = frappe.db.escape(user)
@@ -116,7 +116,7 @@ def project_has_permission(doc, user=None, ptype=None):
         user = frappe.session.user
 
     roles = frappe.get_roles(user)
-    if "System Manager" in roles:
+    if "System Manager" in roles or "Production Studio Manager" in roles:
         return True
 
     # Project manager can view

@@ -171,7 +171,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-21 15:53:35.960596",
+ "modified": "2026-02-23 20:18:04.441010",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Task",
@@ -195,7 +195,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects Manager",
+   "role": "Production Studio Manager",
    "share": 1,
    "write": 1
   },
@@ -205,7 +205,17 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects User",
+   "role": "Production Project Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Project User",
    "share": 1,
    "write": 1
   },
@@ -227,7 +237,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects Manager",
+   "role": "Production Studio Manager",
    "share": 1,
    "write": 1
   },
@@ -238,7 +248,18 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Projects User",
+   "role": "Production Project Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Project User",
    "share": 1
   }
  ],

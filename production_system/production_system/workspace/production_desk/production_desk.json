@@ -62,7 +62,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-12-06 09:15:02.451717",
+ "modified": "2026-02-23 20:14:09.317040",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Desk",
@@ -88,7 +88,20 @@
  "parent_page": "",
  "public": 1,
  "quick_lists": [],
- "roles": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Production Studio Manager"
+  },
+  {
+   "role": "Production Project Manager"
+  },
+  {
+   "role": "Production Project User"
+  }
+ ],
  "sequence_id": 1.0,
  "shortcuts": [],
  "title": "Production Desk"

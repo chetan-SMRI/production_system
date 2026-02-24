@@ -8,11 +8,12 @@ frappe.ui.form.on("Production Project", {
 
 		// check if current user is System Manager
 		const isSystemManager = roles.includes("System Manager");
+		const isStudioManager = roles.includes("Production Studio Manager");
 
 		// check if current user is the project manager of this project
 		const isProjectManager = frm.doc.project_manager === user;
 
-		if (isSystemManager || isProjectManager) {
+		if (isSystemManager || isStudioManager || isProjectManager) {
 			// Black "Create a Task" button with a plus icon
 
 			frm.add_custom_button(
@@ -32,10 +33,6 @@ frappe.ui.form.on("Production Project", {
 				.removeClass("btn-default")
 				.addClass("btn-danger");
 
-			frm.add_custom_button(
-				"Close Project",
-				() => close_project(frm),
-			).removeClass("btn-default").addClass("btn-danger");
 		}
 		if (isSystemManager){
 			frm.add_custom_button(
@@ -103,48 +100,7 @@ frappe.ui.form.on("Production Project", {
 		open_remove_item_dialog(frm);
 	},
 });
-function close_project(frm) {
-	frappe.confirm(
-				__(
-					"Close project midway? Are you sure about your action, once closed, only System Managers can make it active again."
-				),
-				function () {
-					frappe.call({
-						method: "production_system.api.delete_direct_task",
-						args: {
-							project_name: frm.doc.name,
-							task_name: task_name,
-						},
-						freeze: true,
-						freeze_message: __("Deleting task..."),
-						callback: function (r) {
-							if (!r.exc && r.message && r.message.ok) {
-								d.hide();
-								frappe.show_alert({
-									message: __("Task deleted"),
-									indicator: "green",
-								});
-								// reload to reflect removed row
-								frm.reload_doc && frm.reload_doc();
-							} else {
-								const msg =
-									(r.message && r.message.message) ||
-									__("Could not delete task");
-								frappe.msgprint({
-									title: __("Error"),
-									message: msg,
-									indicator: "red",
-								});
-							}
-						},
-					});
-				},
-				function () {
-					// cancelled
-				}
-			);
-	d.show();
-}
+
 
 function delete_project(frm) {
 	frappe.confirm(
@@ -598,16 +554,50 @@ function open_create_direct_task_dialog(frm) {
 		title: __("Create Task"),
 		fields: [
 			{
+				fieldtype: "Link",
+				fieldname: "project",
+				label: __("Production Project"),
+				options: "Production Project",
+				reqd: 1,
+				hidden: 1,
+				default: frm.doc.name
+			},
+			{
+				fieldtype: "Link",
+				fieldname: "parent_task",
+				label: __("Select Parent"),
+				options: "Production Task",
+				get_query: function() {
+					return {
+						filters: [
+							["Production Task", "project", "=", frm.doc.name],
+							["Production Task", "is_parent", "=", true],
+						]
+					};
+				}
+			},
+			{
 				fieldtype: "Data",
 				fieldname: "task_subject",
 				label: __("Task Subject"),
 				reqd: 1,
 			},
 			{
+				fieldtype: "Select",
+				fieldname: "milestone",
+				label: __("Milestone"),
+				options: milestone_options.length
+					? milestone_options
+					: ["No milestones available"],
+				reqd: 1,
+				default: milestone_options[0]
+			},
+			{
 				fieldtype: "Date",
 				fieldname: "start_date",
 				label: __("Start Date"),
 				reqd: 1,
+				default: "Today"
 			},
 			{ fieldtype: "Date", fieldname: "due_date", label: __("Due Date"), reqd: 1 },
 			{
@@ -620,15 +610,6 @@ function open_create_direct_task_dialog(frm) {
 				fieldtype: "Attach",
 				fieldname: "attachment",
 				label: __("Attachment"),
-			},
-			{
-				fieldtype: "Select",
-				fieldname: "milestone",
-				label: __("Milestone"),
-				options: milestone_options.length
-					? milestone_options
-					: ["No milestones available"],
-				reqd: 1,
 			},
 		],
 		primary_action_label: __("Create"),
@@ -646,13 +627,14 @@ function open_create_direct_task_dialog(frm) {
 			frappe.call({
 				method: "production_system.api.create_direct_task",
 				args: {
-					project_name: frm.doc.name,
+					project_name: values.project,
 					task_subject: values.task_subject,
 					start_date: values.start_date,
 					due_date: values.due_date,
 					assigned_to: values.assigned_to || "",
 					milestone: values.milestone,
-					attachment: values.attachment
+					attachment: values.attachment,
+					parent_task: values.parent_task
 				},
 				freeze: true,
 				freeze_message: __("Creating task and linking to project..."),
