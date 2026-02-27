@@ -17,7 +17,7 @@ class ProductionTask(Document):
         if doc.is_child:
             pt = frappe.get_doc('Production Task', doc.parent_task)
             pt.update_parent_progress()
-            pt.save()
+            pt.save(ignore_permissions=True)
 
     
     def update_parent_progress(doc):

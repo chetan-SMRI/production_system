@@ -2,18 +2,12 @@ import frappe
 
 
 def task_permission_query(user=None):
-	"""
-	Return SQL WHERE fragment (string) to restrict Production Task list results
-	according to the rules:
-	- System Manager: no restriction (return None)
-	- If task.project has project_manager == user -> visible
-	- If user has role 'Projects User' and task.assigned_to == user -> visible
-	"""
 	if not user:
 		user = frappe.session.user
 
 	roles = frappe.get_roles(user)
-	# System Manager -> no restriction
+
+	# Full access roles
 	if "System Manager" in roles or "Production Studio Manager" in roles:
 		return None
 
@@ -21,83 +15,111 @@ def task_permission_query(user=None):
 
 	clauses = []
 
-	# Clause: project manager of the parent Production Project
-	# we match Production Task.project to Production Project.project_manager = user
-	clauses.append(
-		"`tabProduction Task`.project IN (SELECT name FROM `tabProduction Project` "
-		f"WHERE IFNULL(project_manager, '') = {user_escaped})"
-	)
+	# ---------------- PROJECT MANAGER ----------------
+	if "Production Project Manager" in roles:
+		# Tasks under projects where user is project manager
+		clauses.append(
+			"`tabProduction Task`.project IN (SELECT name FROM `tabProduction Project` "
+			f"WHERE IFNULL(project_manager, '') = {user_escaped})"
+		)
 
-	# Clause: Projects User role -> tasks assigned to this user
-	if "Projects User" in roles:
-		clauses.append(f"`tabProduction Task`.assigned_to = {user_escaped}")
+	# ---------------- COMMON (MANAGER + USER) ----------------
+	# Assigned to user
+	clauses.append(f"`tabProduction Task`.assigned_to = {user_escaped}")
 
-	# Combine clauses with OR
+	# Created by user
+	clauses.append(f"`tabProduction Task`.owner = {user_escaped}")
+
+	# Combine
 	if clauses:
 		return "(" + " OR ".join(clauses) + ")"
 
-	# No clauses -> deny everything (shouldn't happen because system manager returned earlier)
 	return "1=0"
 
-
 def task_has_permission(doc, user=None, ptype=None):
-	"""
-	Per-doc permission check for a Production Task doc object.
-	Returns True/False.
-	"""
 	if not user:
 		user = frappe.session.user
 
-	# System Manager -> full access
 	roles = frappe.get_roles(user)
+
+	# Full access
 	if "System Manager" in roles or "Production Studio Manager" in roles:
 		return True
 
-	# If the task's project has project_manager == user -> access allowed
-	project_name = doc.get("project")
-	if project_name:
-		pm = frappe.db.get_value("Production Project", project_name, "project_manager")
-		if pm and pm == user:
+	# ---------------- PROJECT MANAGER ----------------
+	if "Production Project Manager" in roles:
+		project_name = doc.get("project")
+		if project_name:
+			pm = frappe.db.get_value("Production Project", project_name, "project_manager")
+			if pm == user:
+				return True
+
+	# ---------------- COMMON ----------------
+
+	# ✅ CURRENT assignment
+	if (doc.get("assigned_to") or "").strip() == user:
+		return True
+
+	# ✅ OWNER
+	if doc.get("owner") == user:
+		return True
+
+	# 🔥 NEW: allow reassignment if user WAS previously assigned
+	old_doc = frappe.get_doc("Production Task", doc.name)
+	print(old_doc, old_doc.assigned_to)
+	if old_doc:
+		if (old_doc.get("assigned_to") or "").strip() == user:
 			return True
 
-	# If user has 'Projects User' role and is assigned_to on task -> allowed
-	if "Projects User" in roles:
-		assigned = (doc.get("assigned_to") or "").strip()
-		if assigned == user:
-			return True
-
-	# Otherwise deny
 	return False
+
+
+ROLE_MANAGER = "Production Studio Manager"
+ROLE_PROJECT_USER = "Production Project User"
 
 
 def project_permission_query(user=None):
     """
-    Return SQL WHERE fragment (string) to restrict Production Project list results:
-      - System Manager/Studio Manager: no restriction (None)
-      - If project.project_manager == user -> visible
-      - If user has role 'Projects User' and there exists a Production Task in that project
-        with assigned_to == user -> visible
+    SQL WHERE clause for Production Project list view:
+      - System Manager / Production Studio Manager → full access
+      - Project Manager → own projects
+      - Production Project User → projects where at least 1 task is assigned
     """
+
     if not user:
         user = frappe.session.user
 
     roles = frappe.get_roles(user)
-    if "System Manager" in roles or "Production Studio Manager" in roles:
+
+    # Full access roles
+    if "System Manager" in roles or ROLE_MANAGER in roles:
         return None
 
     user_escaped = frappe.db.escape(user)
-
     clauses = []
-    # Project manager clause
-    clauses.append(f"IFNULL(`tabProduction Project`.project_manager, '') = {user_escaped}")
 
-    # Projects User clause: project has at least one Production Task assigned to user
-    if "Projects User" in roles:
+    # ✅ Project Manager access
+    clauses.append(
+        f"IFNULL(`tabProduction Project`.project_manager, '') = {user_escaped}"
+    )
+
+    # ✅ Project User access (via Production Task assignment)
+    if ROLE_PROJECT_USER in roles:
         clauses.append(
             "`tabProduction Project`.name IN ("
             "SELECT `tabProduction Task`.project FROM `tabProduction Task` "
-            f"WHERE `tabProduction Task`.project = `tabProduction Project`.name "
-            f"AND IFNULL(`tabProduction Task`.assigned_to, '') = {user_escaped}"
+            f"WHERE IFNULL(`tabProduction Task`.assigned_to, '') = {user_escaped}"
+            ")"
+        )
+
+        # 🔥 OPTIONAL: If you are using Frappe Assignment (ToDo)
+        clauses.append(
+            "`tabProduction Project`.name IN ("
+            "SELECT t.project FROM `tabProduction Task` t "
+            "INNER JOIN `tabToDo` td ON td.reference_name = t.name "
+            "AND td.reference_type = 'Production Task' "
+            f"WHERE td.allocated_to = {user_escaped} "
+            "AND td.status != 'Cancelled'"
             ")"
         )
 
@@ -109,27 +131,47 @@ def project_permission_query(user=None):
 
 def project_has_permission(doc, user=None, ptype=None):
     """
-    Per-doc permission check for Production Project.
-    Returns True/False.
+    Per-document permission for Production Project:
+      - System Manager / Production Studio Manager → full access
+      - Project Manager → own project
+      - Production Project User → if assigned to at least 1 task
     """
+
     if not user:
         user = frappe.session.user
 
     roles = frappe.get_roles(user)
-    if "System Manager" in roles or "Production Studio Manager" in roles:
+
+    # ✅ Full access
+    if "System Manager" in roles or ROLE_MANAGER in roles:
         return True
 
-    # Project manager can view
-    project_manager = (doc.get("project_manager") or "").strip()
-    if project_manager == user:
+    # ✅ Project Manager
+    if (doc.get("project_manager") or "").strip() == user:
         return True
 
-    # Projects User role: allowed if any task in this project is assigned to this user
-    if "Projects User" in roles:
+    # ✅ Project User (via direct field)
+    if ROLE_PROJECT_USER in roles:
         exists = frappe.db.exists(
             "Production Task",
             {"project": doc.name, "assigned_to": user}
         )
+        if exists:
+            return True
+
+        # 🔥 OPTIONAL: If using Assignment (ToDo)
+        exists = frappe.db.sql("""
+            SELECT 1
+            FROM `tabProduction Task` t
+            INNER JOIN `tabToDo` td
+                ON td.reference_name = t.name
+                AND td.reference_type = 'Production Task'
+            WHERE t.project = %s
+              AND td.allocated_to = %s
+              AND td.status != 'Cancelled'
+            LIMIT 1
+        """, (doc.name, user))
+
         if exists:
             return True
 

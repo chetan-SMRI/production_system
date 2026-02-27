@@ -34,6 +34,7 @@
    "unique": 1
   },
   {
+   "default": "Today",
    "fieldname": "start_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -52,7 +53,7 @@
    "fieldname": "generate_item_tasks",
    "fieldtype": "Button",
    "label": "Generate Item Tasks",
-   "permlevel": 2
+   "permlevel": 4
   },
   {
    "fetch_from": "choose_template.template_file",
@@ -72,7 +73,7 @@
    "fieldtype": "Table",
    "label": "Items",
    "options": "Production Item",
-   "permlevel": 1,
+   "permlevel": 3,
    "read_only_depends_on": "eval: doc.initialised_item_tasks"
   },
   {
@@ -118,14 +119,14 @@
    "fieldname": "remove_a_item",
    "fieldtype": "Button",
    "label": "Remove a Item",
-   "permlevel": 3
+   "permlevel": 4
   },
   {
    "depends_on": "eval: doc.initialised_item_tasks",
    "fieldname": "add_new_item",
    "fieldtype": "Button",
    "label": "Add New Item",
-   "permlevel": 3
+   "permlevel": 4
   },
   {
    "fieldname": "direct_tasks",
@@ -157,7 +158,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-24 09:21:04.161157",
+ "modified": "2026-02-24 09:43:01.434527",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project",
@@ -289,6 +290,48 @@
    "email": 1,
    "export": 1,
    "permlevel": 3,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 3,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Studio Manager",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 3,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Project Manager",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 3,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Production Project User",
+   "share": 1
+  },
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "permlevel": 4,
    "print": 1,
    "read": 1,
    "report": 1,
