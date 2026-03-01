@@ -8,6 +8,7 @@ def process_production_task_notifications():
 		settings = frappe.get_single("Production Settings")
 
 		whatsapp_account =  settings.whatsapp_account
+		task_today_due = settings.task_today_due
 		task_to_be_delayed = settings.task_to_be_delayed
 		task_delayed_template = settings.task_delayed_template
 		
@@ -33,8 +34,8 @@ def process_production_task_notifications():
 		)
 
 		for task in tasks:
-			if task.assigned_to != "pu@email.com":
-				continue
+			# if task.assigned_to != "pu@email.com":
+			# 	continue
 			due_date = get_datetime(task.due_date).date()
 
 			# Difference in days
@@ -47,7 +48,7 @@ def process_production_task_notifications():
 				# send_notification(task.name, "Due Today")
 				pu_mobile = frappe.get_value("User",task_doc.assigned_to,'mobile_no')
 				context_data = task_doc.as_dict()
-				send_message_in_background(whatsapp_account,pu_mobile,template=task_to_be_delayed,whitelabel=False,context=context_data)
+				send_message_in_background(whatsapp_account,pu_mobile,template=task_today_due,whitelabel=False,context=context_data)
 				
 				print(f"{task.name} -> due today")
 
