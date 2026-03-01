@@ -65,7 +65,7 @@ def create_initial_tasks(project):
             task.type = clean(row.get("Type"))
             task.task_subject = clean(row.get("Task Subject"))
             task.task_type = "Project" if clean(row.get("Task Type")) == "Project-Parent" else clean(row.get("Task Type"))
-            task.assigned_to = clean(row.get("Assigned To"))
+            task.assigned_to = project.project_manager
             task.is_parent = True if clean(row.get("Task Type")) == "Project-Parent" else False
 
             # Calculate Expected End Date

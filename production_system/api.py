@@ -163,7 +163,7 @@ def create_task_from_row(project, row, dependency_type=None, item=None, furnitur
     task_subject = str(clean(row.get("Task Subject"), "")).strip()
     task_type = str(clean(row.get("Task Type"), "")).strip()
     milestone = clean(row.get("Milestone"))
-    assigned_to = clean(row.get("Assigned To"))
+    assigned_to = project.project_manager
     dependency_target = clean(row.get("Dependency Target"))
 
     # Duplicate check (project + task_subject + task_type + optional item)
