@@ -8,8 +8,14 @@
   "whatsapp_account",
   "new_proj_template",
   "column_break_ocov",
+  "task_created_template",
   "task_assigned_template",
-  "task_created_template"
+  "delayed_task_settings_section",
+  "start_sending_notification_before_delay_date",
+  "task_to_be_delayed",
+  "column_break_ztgr",
+  "send_notification_each_day_after_task_delayed",
+  "task_delayed_template"
  ],
  "fields": [
   {
@@ -39,13 +45,46 @@
    "fieldtype": "Link",
    "label": "Task Created Template",
    "options": "WhatsApp Message Template"
+  },
+  {
+   "fieldname": "delayed_task_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Delayed Task Settings"
+  },
+  {
+   "default": "0",
+   "fieldname": "send_notification_each_day_after_task_delayed",
+   "fieldtype": "Check",
+   "label": "Send Notification Each Day After Task Delayed?"
+  },
+  {
+   "fieldname": "task_delayed_template",
+   "fieldtype": "Link",
+   "label": "Task Delayed Template",
+   "options": "WhatsApp Message Template"
+  },
+  {
+   "description": "enter with comma if multiple, like 3,2,1",
+   "fieldname": "start_sending_notification_before_delay_date",
+   "fieldtype": "Data",
+   "label": "Start sending notification before delay date"
+  },
+  {
+   "fieldname": "column_break_ztgr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "task_to_be_delayed",
+   "fieldtype": "Link",
+   "label": "Task To Be Delayed",
+   "options": "WhatsApp Message Template"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-01 08:17:16.094521",
+ "modified": "2026-03-01 09:22:11.820423",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Settings",

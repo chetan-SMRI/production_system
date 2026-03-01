@@ -150,23 +150,6 @@ has_permission = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"production_system.tasks.all"
-# 	],
-# 	"daily": [
-# 		"production_system.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"production_system.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"production_system.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"production_system.tasks.monthly"
-# 	],
-# }
 
 # Testing
 # -------
@@ -248,3 +231,11 @@ fixtures = [
 	{'dt': 'Client Script', 'filters': {'name': ('in',['CustomOrderSampleSelector'])}},
 	{'dt': 'List View Settings', 'filters': {'name': ('in', ['Production Project', 'Production Task'])}}
 ]
+
+scheduler_events = {
+	"cron": {
+		"0 10 * * *": [
+			"production_system.notifications.process_production_task_notifications"
+		]
+	}
+}
