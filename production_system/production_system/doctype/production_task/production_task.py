@@ -3,7 +3,32 @@ from frappe.model.document import Document
 from frappe.utils import today,now
 import pandas as pd
 from production_system.api import create_task_from_row,clean
+from whatsapp_web_automation.whatsapp_web_automation.api.send_message import send_message_in_background
+
 class ProductionTask(Document):
+    def after_insert(doc):
+        # if new task has assigned_to but is not project manager then we can safely message the user
+        proj_mngr = frappe.get_value("Production Project", doc.project,'project_manager')
+        if doc.assigned_to and doc.assigned_to != proj_mngr:
+            prod_settings = frappe.get_doc('Production Settings','Production Settings')
+            if prod_settings.whatsapp_account and prod_settings.task_created_template:
+                # send whatsapp message
+                pu_mobile = frappe.get_value("User",doc.assigned_to,'mobile_no')
+                context_data = doc.as_dict()
+                send_message_in_background(prod_settings.whatsapp_account,pu_mobile,template=prod_settings.task_created_template,whitelabel=False,context=context_data)
+    def before_save(doc):
+        # get old doc, if assigned_to is changed, we will send notification to new user
+        if not doc.is_new():
+            old_doc = frappe.get_doc("Production Task", doc.name)
+            if old_doc.assigned_to != doc.assigned_to:
+                # whatsapp message on new user assignment
+                prod_settings = frappe.get_doc('Production Settings','Production Settings')
+                if prod_settings.whatsapp_account and prod_settings.task_assigned_template:
+                    # send whatsapp message
+                    pu_mobile = frappe.get_value("User",doc.assigned_to,'mobile_no')
+                    context_data = doc.as_dict()
+                    send_message_in_background(prod_settings.whatsapp_account,pu_mobile,template=prod_settings.task_assigned_template,whitelabel=False,context=context_data)
+
     def validate(doc):
         if doc.status == "Completed" or doc.status == "Cancelled":
             on_task_completed(doc)

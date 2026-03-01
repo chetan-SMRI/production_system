@@ -7,7 +7,9 @@
  "field_order": [
   "whatsapp_account",
   "new_proj_template",
-  "task_assigned_template"
+  "column_break_ocov",
+  "task_assigned_template",
+  "task_created_template"
  ],
  "fields": [
   {
@@ -27,13 +29,23 @@
    "fieldtype": "Link",
    "label": "Task Assigned Template",
    "options": "WhatsApp Message Template"
+  },
+  {
+   "fieldname": "column_break_ocov",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "task_created_template",
+   "fieldtype": "Link",
+   "label": "Task Created Template",
+   "options": "WhatsApp Message Template"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-27 16:42:11.450809",
+ "modified": "2026-03-01 08:17:16.094521",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Settings",

@@ -2,10 +2,18 @@ import frappe
 import pandas as pd
 from frappe.utils import add_days, getdate
 from frappe.model.document import Document
+from whatsapp_web_automation.whatsapp_web_automation.api.send_message import send_message_in_background
 
 class ProductionProject(Document):
     def before_insert(self):
         initialize_milestones(self)
+        # whatsapp message on new project
+        prod_settings = frappe.get_doc('Production Settings','Production Settings')
+        if prod_settings.whatsapp_account and prod_settings.new_proj_template:
+            # send whatsapp message
+            pm_mobile = frappe.get_value("User",self.project_manager,'mobile_no')
+            context_data = self.as_dict()
+            send_message_in_background(prod_settings.whatsapp_account,pm_mobile,template=prod_settings.new_proj_template,whitelabel=False,context=context_data)
     
     def after_insert(self):
         # Run task creation engine on project creation
