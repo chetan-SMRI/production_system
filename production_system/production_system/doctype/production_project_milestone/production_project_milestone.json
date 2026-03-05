@@ -15,9 +15,10 @@
  "fields": [
   {
    "fieldname": "milestone_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Milestone Name"
+   "label": "Milestone Name",
+   "options": "Production Milestone"
   },
   {
    "fieldname": "sequence",
@@ -49,7 +50,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-01 16:15:57.869100",
+ "modified": "2026-03-05 20:04:12.709679",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Project Milestone",

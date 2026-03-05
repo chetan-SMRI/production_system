@@ -583,14 +583,28 @@ function open_create_direct_task_dialog(frm) {
 				reqd: 1,
 			},
 			{
-				fieldtype: "Select",
+				// fieldtype: "Select",
+				fieldtype: "Link",
 				fieldname: "milestone",
 				label: __("Milestone"),
-				options: milestone_options.length
-					? milestone_options
-					: ["No milestones available"],
+				// options: milestone_options.length
+				// 	? milestone_options
+				// 	: ["No milestones available"],
+				options: "Production Milestone",
 				reqd: 1,
 				default: milestone_options[0]
+			},
+			{
+				// fieldtype: "Select",
+				fieldtype: "Link",
+				fieldname: "type",
+				label: __("Type"),
+				// options: milestone_options.length
+				// 	? milestone_options
+				// 	: ["No milestones available"],
+				options: "Production Type",
+				reqd: 1,
+				// default: milestone_options[0]
 			},
 			{
 				fieldtype: "Date",
@@ -633,6 +647,7 @@ function open_create_direct_task_dialog(frm) {
 					due_date: values.due_date,
 					assigned_to: values.assigned_to || "",
 					milestone: values.milestone,
+					type: values.type,
 					attachment: values.attachment,
 					parent_task: values.parent_task
 				},
