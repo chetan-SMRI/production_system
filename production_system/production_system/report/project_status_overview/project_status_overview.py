@@ -8,6 +8,9 @@ def execute(filters=None):
 	filters = filters or {}
 	projects_filter = filters.get("projects")
 	user = filters.get("user")
+	milestone = filters.get("milestone")
+	type = filters.get("type")
+
 
 	columns = [
 		{"label": "Project", "fieldname": "project", "fieldtype": "Link", "width": 200, "options": "Production Project"},
@@ -42,14 +45,19 @@ def execute(filters=None):
 	# -----------------------------------
 	# Step 2: Process Each Project
 	# -----------------------------------
-
 	for project in projects:
+		base_filters = {
+			"project": project,
+			"assigned_to": user
+		}
+		if milestone:
+			base_filters["milestone"] = milestone
+		if type:
+			base_filters["type"] = type
+
 		tasks = frappe.get_all(
 			"Production Task",
-			filters={
-				"project": project,
-				"assigned_to": user
-			},
+			filters=base_filters,
 			fields=[
 				"name",
 				"status",
