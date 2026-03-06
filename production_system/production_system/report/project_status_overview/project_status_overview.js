@@ -19,7 +19,7 @@ frappe.query_reports["Project Status Overview"] = {
 			label: __("Select User"),
 			fieldtype: "Link",
 			options: "User",
-			reqd: 1
+			// reqd: 1
 		},
 
 		{
@@ -33,6 +33,16 @@ frappe.query_reports["Project Status Overview"] = {
 			label: __("Select Milestone"),
 			fieldtype: "Link",
 			options: "Production Milestone",
+		},
+		{
+			fieldname: "start_date",
+			label: __("Start Date"),
+			fieldtype: "Date",
+		},
+		{
+			fieldname: "end_date",
+			label: __("End Date"),
+			fieldtype: "Date",
 		},
 	]
 };
