@@ -54,7 +54,7 @@ def create_initial_tasks(project):
         dependency_type = clean(row.get("Dependency Type"), "None")
         dependency_type = str(dependency_type).strip()
         task_type = clean(row.get("Task Type"))
-
+        description = clean(row.get("Description"), None)
         tat_based_on = clean(row.get("TAT Based On"), "Task Creation Date")
 
         # Only create tasks without dependencies
@@ -67,7 +67,7 @@ def create_initial_tasks(project):
             task.task_type = "Project" if clean(row.get("Task Type")) == "Project-Parent" else clean(row.get("Task Type"))
             task.assigned_to = project.project_manager
             task.is_parent = True if clean(row.get("Task Type")) == "Project-Parent" else False
-
+            task.description = description
             # Calculate Expected End Date
             tat_days = clean(row.get("TAT (in days)"))
             tat_days = int(tat_days) if tat_days not in (None, "", "None") else None

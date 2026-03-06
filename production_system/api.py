@@ -209,7 +209,7 @@ def create_task_from_row(project, row, dependency_type=None, item=None, furnitur
 
 
 @frappe.whitelist()
-def create_direct_task(project_name, task_subject, start_date, due_date, assigned_to=None, milestone=None, type=None, parent_task=None,attachment=None):
+def create_direct_task(project_name, task_subject, start_date, due_date, assigned_to=None, milestone=None, type=None, parent_task=None,description=None,attachment=None):
     """
     Creates a Production Task and appends it to Production Project.direct_tasks child table.
     Returns {"ok": True, "task_name": "..."} on success, otherwise raises frappe exceptions.
@@ -256,6 +256,7 @@ def create_direct_task(project_name, task_subject, start_date, due_date, assigne
         "type": type,
         # set other defaults as needed
         "status": "Pending",
+        "description": description,
         "attachment": attachment
     })
     if parent_task:

@@ -621,6 +621,11 @@ function open_create_direct_task_dialog(frm) {
 				label: __("Assign To"),
 			},
 			{
+				fieldtype: "Small Text",
+				fieldname: "description",
+				label: __("Description"),
+			},
+			{
 				fieldtype: "Attach",
 				fieldname: "attachment",
 				label: __("Attachment"),
@@ -648,6 +653,7 @@ function open_create_direct_task_dialog(frm) {
 					assigned_to: values.assigned_to || "",
 					milestone: values.milestone,
 					type: values.type,
+					description: values.description,
 					attachment: values.attachment,
 					parent_task: values.parent_task
 				},

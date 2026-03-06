@@ -9,9 +9,14 @@
    "label": "Task List"
   }
  ],
- "content": "[{\"id\":\"eAH8xEdWqP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Production Desk</span>\",\"col\":12}},{\"id\":\"32zHMRPmq0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Pending\",\"col\":3}},{\"id\":\"SbRHyPrWp2\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task In Progress\",\"col\":3}},{\"id\":\"Qkfb89aOoO\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Completed\",\"col\":3}},{\"id\":\"WN_S7o4Um1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Cancelled\",\"col\":3}},{\"id\":\"MNxhUehgmM\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortcuts\",\"col\":4}},{\"id\":\"nwsN6ecuRe\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Task List\",\"col\":8}},{\"id\":\"IvuvhVAOSU\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Completed Task List\",\"col\":12}}]",
+ "content": "[{\"id\":\"qPraqFXenl\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Prod Desk Block1\",\"col\":12}},{\"id\":\"32zHMRPmq0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Pending\",\"col\":3}},{\"id\":\"SbRHyPrWp2\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task In Progress\",\"col\":3}},{\"id\":\"Qkfb89aOoO\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Completed\",\"col\":3}},{\"id\":\"WN_S7o4Um1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Task Cancelled\",\"col\":3}},{\"id\":\"MNxhUehgmM\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortcuts\",\"col\":4}},{\"id\":\"nwsN6ecuRe\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Task List\",\"col\":8}},{\"id\":\"IvuvhVAOSU\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Completed Task List\",\"col\":12}}]",
  "creation": "2025-09-17 12:48:31.216004",
- "custom_blocks": [],
+ "custom_blocks": [
+  {
+   "custom_block_name": "Prod Desk Block1",
+   "label": "Prod Desk Block1"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -62,7 +67,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-02-23 20:14:09.317040",
+ "modified": "2026-03-06 11:46:59.730379",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Desk",
