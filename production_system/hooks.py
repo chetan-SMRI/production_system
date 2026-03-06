@@ -229,7 +229,8 @@ has_permission = {
 
 fixtures = [
 	{'dt': 'Client Script', 'filters': {'name': ('in',['CustomOrderSampleSelector'])}},
-	{'dt': 'List View Settings', 'filters': {'name': ('in', ['Production Project', 'Production Task'])}}
+	{'dt': 'List View Settings', 'filters': {'name': ('in', ['Production Project', 'Production Task'])}},
+	{'dt': 'Custom HTML Block', 'filters': {'name': ('in', ['Prod Desk Block1'])}}
 ]
 
 scheduler_events = {

@@ -8,10 +8,10 @@
   "disable_sidebar_stats": 0,
   "docstatus": 0,
   "doctype": "List View Settings",
-  "fields": "[{\"fieldname\":\"name\",\"label\":\"ID\"},{\"fieldname\":\"project\",\"label\":\"Project\"},{\"fieldname\":\"task_subject\",\"label\":\"Task Subject\"},{\"fieldname\":\"due_date\",\"label\":\"Due Date\"}]",
-  "modified": "2025-09-07 09:24:26.387565",
+  "fields": "[{\"label\":\"Task Subject\",\"fieldname\":\"task_subject\"},{\"label\":\"Due Date\",\"fieldname\":\"due_date\"},{\"label\":\"Project\",\"fieldname\":\"project\"},{\"label\":\"Assigned To\",\"fieldname\":\"assigned_to\"}]",
+  "modified": "2026-03-06 12:23:08.869165",
   "name": "Production Task",
-  "total_fields": "10"
+  "total_fields": "7"
  },
  {
   "allow_edit": 0,
