@@ -230,7 +230,8 @@ has_permission = {
 fixtures = [
 	{'dt': 'Client Script', 'filters': {'name': ('in',['CustomOrderSampleSelector'])}},
 	{'dt': 'List View Settings', 'filters': {'name': ('in', ['Production Project', 'Production Task'])}},
-	{'dt': 'Custom HTML Block', 'filters': {'name': ('in', ['Prod Desk Block1'])}}
+	{'dt': 'Custom HTML Block', 'filters': {'name': ('in', ['Prod Desk Block1'])}},
+	{'dt': 'WhatsApp Message Template', 'filters': {'name': ('in', ['Task Due Date Coming', 'Task Delayed', 'Production Task Assigned', 'Production Project Created'])}}
 ]
 
 scheduler_events = {

@@ -1,0 +1,42 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "WhatsApp Message Template",
+  "media_fieldname": null,
+  "message_content": "A new project has been created.\nProj. Name: {{project_name}}\nPM : {{project_manager}}",
+  "modified": "2026-02-28 16:44:19.960967",
+  "name": "Production Project Created",
+  "notes": null,
+  "template_name": "Production Project Created"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "WhatsApp Message Template",
+  "media_fieldname": "attachment",
+  "message_content": "{% set today = frappe.utils.getdate(frappe.utils.nowdate()) %}\n{% set due = frappe.utils.getdate(due_date) %}\n{% set days_delayed = (today - due).days %}\n\nTask Hurry Up Task Is Already Delayed\n\nDays Delayed: {{ days_delayed }}\n\nTask ID: {{ name }}\nTask Link: https://tisliving.m.frappe.cloud/app/production-task/{{ name }}\n\nDue date: {{ frappe.utils.format_datetime(due_date, \"dd MMM hh:mm a\") }}",
+  "modified": "2026-03-01 09:25:45.993021",
+  "name": "Task Delayed",
+  "notes": null,
+  "template_name": "Task Delayed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "WhatsApp Message Template",
+  "media_fieldname": "attachment",
+  "message_content": "Task ID: {{name}}\nTask Link: https://tisliving.m.frappe.cloud/app/production-task/{{name}}\n\nTask assigned by {{frappe.session.user}} to you.\nDue date: {{ frappe.utils.format_datetime(due_date, \"dd MMM hh:mm a\") }}",
+  "modified": "2026-02-28 19:39:08.050918",
+  "name": "Production Task Assigned",
+  "notes": null,
+  "template_name": "Production Task Assigned"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "WhatsApp Message Template",
+  "media_fieldname": "attachment",
+  "message_content": "Task Due Date Coming\n\n{%- set today = frappe.utils.getdate(frappe.utils.nowdate()) -%}\n{%- set due = frappe.utils.getdate(due_date) -%}\n{%- set days_left = (due - today).days %}\n\nDays Left: {{days_left}}\n\nTask ID: {{name}}\nTask Link: https://tisliving.m.frappe.cloud/app/production-task/{{name}}\n\nDue date: {{ frappe.utils.format_datetime(due_date, \"dd MMM hh:mm a\") }}",
+  "modified": "2026-03-01 09:42:57.824525",
+  "name": "Task Due Date Coming",
+  "notes": null,
+  "template_name": "Task Due Date Coming"
+ }
+]
