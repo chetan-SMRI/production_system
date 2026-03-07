@@ -31,7 +31,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Shortcuts",
-   "link_count": 3,
+   "link_count": 6,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -65,9 +65,40 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project Status Overview",
+   "link_count": 0,
+   "link_to": "Project Status Overview",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Milestone Overview",
+   "link_count": 0,
+   "link_to": "Project Milestone Overview",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Production Project",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Project Furniture Overview",
+   "link_count": 0,
+   "link_to": "Project Furniture Overview",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-03-06 11:46:59.730379",
+ "modified": "2026-03-07 11:43:33.248662",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Desk",
