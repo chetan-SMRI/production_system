@@ -78,13 +78,12 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Project Milestone Overview",
    "link_count": 0,
    "link_to": "Project Milestone Overview",
    "link_type": "Report",
    "onboard": 0,
-   "report_ref_doctype": "Production Project",
    "type": "Link"
   },
   {
@@ -98,7 +97,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-03-07 11:43:33.248662",
+ "modified": "2026-03-13 08:40:24.602746",
  "modified_by": "Administrator",
  "module": "Production System",
  "name": "Production Desk",
@@ -138,7 +137,7 @@
    "role": "Production Project User"
   }
  ],
- "sequence_id": 1.0,
+ "sequence_id": 2.0,
  "shortcuts": [],
  "title": "Production Desk"
 }
