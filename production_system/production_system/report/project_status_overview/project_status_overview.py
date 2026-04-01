@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.utils import getdate, nowdate
+from urllib.parse import urlencode
 
 
 def execute(filters=None):
@@ -144,11 +145,33 @@ def execute(filters=None):
 		)
 
 		# Links
-		user_query = f"&assigned_to={user}" if user else ""
+		def build_task_link(statuses=None):
+			query_params = {"project": project}
 
-		assigned_link = f"/app/production-task?project={project}{user_query}"
-		completed_link = f"/app/production-task?project={project}{user_query}&status=%5B%22in%22%2C%5B%22Completed%22%2C%22Cancelled%22%2Cnull%5D%5D"
-		pending_link = f"/app/production-task?project={project}{user_query}&status=%5B%22in%22%2C%5B%22Pending%22%2C%22In+Progress%22%2Cnull%5D%5D"
+			if user:
+				query_params["assigned_to"] = user
+
+			if milestone:
+				query_params["milestone"] = milestone
+
+			if type:
+				query_params["type"] = type
+
+			if start_date and end_date:
+				query_params["start_date"] = frappe.as_json(["between", [start_date, end_date]])
+			elif start_date:
+				query_params["start_date"] = frappe.as_json([">=", start_date])
+			elif end_date:
+				query_params["start_date"] = frappe.as_json(["<=", end_date])
+
+			if statuses is not None:
+				query_params["status"] = frappe.as_json(["in", statuses])
+
+			return f"/app/production-task?{urlencode(query_params)}"
+
+		assigned_link = build_task_link()
+		completed_link = build_task_link(["Completed", "Cancelled", None])
+		pending_link = build_task_link(["Pending", "In Progress", None])
 
 		data.append({
 			"project": project,
